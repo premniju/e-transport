@@ -1,14 +1,226 @@
-<ion-header>
-  <ion-navbar>
+<ion-header no-border>
+  <ion-navbar hideBackButton color="primary" class="center-text">
     <ion-title>
-      Ionic Blank
+      TRANSPORT DIMENSION TOOL
     </ion-title>
+    <ion-icon color="light" class="logout-icon" name="log-out" (click)="logout()"></ion-icon>
+    
   </ion-navbar>
+  <ion-grid fixed class="e-header" align-items-center style="width:100%">
+    <ion-row>
+      <ion-col col-8 align-self-start style="background-color: #2D5984;
+    padding-left: 10%;
+    padding-top: 5%;
+    padding-bottom: 5%;">
+        <div style="font-size: 1.2em;
+    color: #F08026">CSR Capacity</div>
+        <div style="font-size: 2.0em;
+    color: #fff;">
+          {{cb}} Mbps
+        </div>
+      </ion-col>
+
+      <ion-col style="background: #328AB4;">
+        <ion-icon name="analytics" style="font-size: 4.5em;margin-left:25%" (click)="loadChart()"></ion-icon>
+        <div style="margin-left: 20%;"> View Graph</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-segment [(ngModel)]="tab">
+          <ion-segment-button value="baseline">
+            Baseline
+          </ion-segment-button>
+          <ion-segment-button value="evolution">
+            Evolution
+          </ion-segment-button>
+
+        </ion-segment>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content class="content-wrapper">
+
+  <ion-grid>
+
+    <div>
+     
+
+      <div class="{{customClass}}">
+
+        <div [ngSwitch]="tab">
+          <ion-list *ngSwitchCase="'baseline'">
+
+            <ion-item>
+              <ion-label>Load Configuration</ion-label>
+              <ion-select [(ngModel)]="config" (ionChange)="onCustomerChange($event)">
+                <ion-option *ngFor="let key of customerList" value="{{key}}">{{key}}</ion-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item *ngIf="config">
+              <ion-label>No of Carriers/Sites</ion-label>
+              <ion-select [(ngModel)]="carrier" (ionChange)="onCarrierChange($event)">
+                <ion-option *ngFor="let key of carrierlist" value="{{key}}">{{key}}</ion-option>
+              </ion-select>
+            </ion-item>
+            <div *ngFor="let item of selectedCarrierList">
+              <ion-item class="e-heading-row">
+                <ion-label>Carrier {{item}} <span class="e-value">({{ formElements['ca_'+item] }} Mbps)</span>
+
+                  <ion-icon color="primary" [name]="this.formElements['icon'+item]" class="float-right" (click)="toggleDetails(item)"></ion-icon>
+
+                  
+                  <!--<ion-icon class="float-right" color="primary" name="create"></ion-icon>-->
+                </ion-label>
+
+              </ion-item>
+              <div *ngIf="formElements['isShow'+item]">
+                <ion-item>
+                  <ion-label>No of Radios</ion-label>
+                  <ion-select [(ngModel)]="formElements['nCells_'+item]" (ionChange)="onChange($event,'nCells_',item)">
+                    <ion-option *ngFor="let cell of nCellsList" value="{{cell.value}}">{{cell.name}}</ion-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Channel BW</ion-label>
+                  <ion-select [(ngModel)]="formElements['chCapacity_'+item]" (ionChange)="onChange($event,'chCapacity_',item)">
+                    <ion-option *ngFor="let channel of channelCapacityList" value="{{channel.value}}">{{channel.name}}</ion-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label>MIMO</ion-label>
+                  <ion-select [(ngModel)]="formElements['mimo_'+item]" (ionChange)="onChange($event,'mimo_',item)">
+                    <ion-option *ngFor="let mimo of mimoList" value="{{mimo.value}}">{{mimo.name}}</ion-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label>QAM</ion-label>
+                  <ion-select [(ngModel)]="formElements['qam_'+item]" (ionChange)="onChange($event,'qam_',item)">
+                    <ion-option *ngFor="let qam of qamList" value="{{qam.value}}">{{qam.name}}</ion-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <div class="center-text">
+                  <button ion-button small  icon-left (click)="toggleAdvanceEditable(item)" class="advance-edit-btn" > 
+ 
+  <ion-icon [name]="formElements['advanceEditIcon'+item]"></ion-icon>
+   {{formElements['advanceEditBtn'+item]}}
+</button>
+</div>
+                </ion-item>
+                
+              </div>
+              <div *ngIf="formElements['isShowAdvanceEditable'+item]">
+                <ion-item>
+                  <ion-label>Spectrum Efficiency</ion-label>
+                  <ion-input required [(ngModel)]="formElements['mimoValue_'+item]" type="number"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label>TN Overhead</ion-label>
+                  <ion-input min="0" max="4" required [(ngModel)]="formElements['thresholdValue_'+item]" type="number"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Cell Peak Rate</ion-label>
+                  <ion-input min="0" max="4" required [(ngModel)]="formElements['cellPeakRate_'+item]" type="number"></ion-input>
+                </ion-item>
+              </div>
+
+            </div>
+
+          </ion-list>
+
+
+          <ion-list *ngSwitchCase="'evolution'">
+
+            <ion-item>
+              <ion-label>Add Technology</ion-label>
+              <ion-select [(ngModel)]="technology" multiple="true" (ionChange)="onTechnologySelect($event)">
+                <ion-option *ngFor="let techn of technologyList" value="{{techn.name}}">{{techn.name}}</ion-option>
+
+              </ion-select>
+            </ion-item>
+
+            <div *ngFor="let item of selectedTechnology">
+              <ion-item class="e-heading-row">
+                <ion-label>{{item.name}} <span class="e-value">({{ formElements['ca_'+item.shortname] }} Mbps)</span>
+                  <!--<ion-icon color="primary" [name]="this.formElements['icon'+item.shortname]" class="float-right" (click)="toggleDetails(item.shortname)"></ion-icon>-->
+                  <!--<button (click)="toggleAdvanceEditable(item.shortname)" class="float-right advance-edit-btn" ion-button icon-end small> 
+  {{formElements['advanceEditBtn'+item.shortname]}}
+  <ion-icon [name]="formElements['advanceEditIcon'+item.shortname]"></ion-icon>
+</button>-->
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>No of Carriers/Sites</ion-label>
+                <ion-select [(ngModel)]="formElements['carrier_'+item.shortname]" (ionChange)="onTechCarrierChange($event,item.shortname)">
+                  <ion-option *ngFor="let key of carrierlist" value="{{key}}">{{key}}</ion-option>
+                </ion-select>
+              </ion-item>
+              <div *ngFor="let c of formElements['selectedcarrier_'+item.shortname]">
+                <ion-item >
+                  <ion-label>Carrier {{c}} <span class="e-value">({{ formElements['ca_'+c+"_"+item.shortname] }} Mbps)</span>
+
+
+                    <ion-icon color="primary" [name]="this.formElements['icon'+c+'_'+item.shortname]" class="float-right" (click)="toggleDetails(c,item.shortname)"></ion-icon>
+                    
+
+                    <!--<ion-icon class="float-right" color="primary" name="create"></ion-icon>-->
+                  </ion-label>
+
+                </ion-item>
+                <div *ngIf="formElements['isShow'+c+'_'+item.shortname]">
+                  <div *ngFor="let field of item.fields">
+                    <div [ngSwitch]="field.type">
+
+                      <ion-item *ngSwitchCase="1">
+                        <ion-label>{{field.label }}</ion-label>
+                        <ion-select [(ngModel)]="formElements[field.name+c+'_'+item.shortname]" (ionChange)="onEvolutionChange($event,field.name,item.shortname,c)">
+                          <ion-option *ngFor="let k of field.options" value="{{k.value}}">{{k.name}}</ion-option>
+                        </ion-select>
+                      </ion-item>
+                      <ion-item *ngSwitchCase="2">
+                        <ion-label>{{field.label}}</ion-label>
+                        <ion-input type="number" required [(ngModel)]="formElements[field.name+'_'+c+'_'+item.shortname]" (ionChange)="onEvolutionChange($event.value,field.name,item.shortname,c)"></ion-input>
+                      </ion-item>
+
+
+                    </div>
+                  </div>
+                   <ion-item>
+                  <div class="center-text">
+                    <button (click)="toggleAdvanceEditable(c,item.shortname)" class="advance-edit-btn" ion-button small  icon-left> 
+    <ion-icon [name]="formElements['advanceEditIcon'+c+'_'+item.shortname]"></ion-icon>
+  {{formElements['advanceEditBtn'+c+'_'+item.shortname]}}
+</button>
+                  </div>
+                   </ion-item>
+                </div>
+                <div *ngIf="formElements['isShowAdvanceEditable'+c+'_'+item.shortname]">
+                  <ion-item>
+                    <ion-label>Spectrum Efficiency</ion-label>
+                    <ion-input required [(ngModel)]="formElements['mimoValue_'+c+'_'+item.shortname]" type="number"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>TN Overhead</ion-label>
+                    <ion-input min="0" max="4" required [(ngModel)]="formElements['thresholdValue_'+c+'_'+item.shortname]" type="number"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                  <ion-label>Cell Peak Rate</ion-label>
+                  <ion-input min="0" max="4" required [(ngModel)]="formElements['cellPeakRate_'+c+'_'+item.shortname]" type="number"></ion-input>
+                </ion-item>
+                </div>
+
+              </div>
+
+            </div>
+
+          </ion-list>
+
+        </div>
+      </div>
+    </div>
+  </ion-grid>
 </ion-content>

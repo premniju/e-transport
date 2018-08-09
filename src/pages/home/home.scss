@@ -1,3 +1,54 @@
 page-home {
+.chart-wrapper {
+      width: 85%;
+      display: inline-block;
+      margin: auto;
+    //   margin: 1em 2em;
+   }
+.list-md{
+    margin: 1px 0px 16px;
+}
 
+   canvas  {
+      height: 500px;
+   }
+   .browser-view{
+    // width: 50%;
+    // border: 1px solid #efefef;
+    // border-radius: 5px;
+   }
+   .item-input .label-md, .item-select .label-md, .item-datetime .label-md{
+    color: #2C4772 !important;
+}
+.content-wrapper{
+    // background-color: #2C4772;
+    //background: linear-gradient(#2C4772, #2C4772, #2C4D78, #2C4D78, #2C4D78, #2C4D78, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
+    margin: 0%;
+    padding: 0%;
+    width: 100%;
+    font-family: hilda;
+}
+.e-header{
+    padding: 0px;
+    min-height: 10%;
+
+}
+.edit-icon{
+    float: right;
+    margin-right: 10px;
+    font-size: 2.0em;
+}
+.e-heading-row{
+    background-color: #EFF0F1
+}   
+.advance-edit-btn{
+    margin-top: 0px;
+    height: 1.5em;
+    margin-bottom: 0px; 
+    // margin-left: 33%;
+    /* margin: auto; */
+    /* text-align: center; */
+    // font-weight: bold;
+    //border-style: none;
+}
 }

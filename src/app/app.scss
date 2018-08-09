@@ -14,3 +14,90 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+
+.master {        
+    background: linear-gradient(#2C4772, #2C4772, #2C4D78, #2C4D78, #2C4D78, #2C4D78, #2C4D78, #2C4D78, #2C4D78, #328BB5, #328BB5, #328BB5, #328BB5);
+    margin: 0%;
+    padding: 0%;
+    width: 100%;
+}
+
+.center-text {
+    text-align: $toolbar-ios-title-text-align;
+}
+
+.title{
+    font-size: .9em !important;
+    color:#2C4772;
+    display:inline-block;
+}
+.e-logo{
+    margin-bottom: 15px;
+}
+.content_name {
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    background-color: #FFFFFF;
+    min-height: 50%;
+    width: 100%;
+    margin-bottom: 10em;
+}
+
+    .remove-border {
+    width: 70%;
+    height: 30px !important;
+    margin-right: 20%;
+    padding: 3.5%
+}
+.user-input {
+    width: 92%!important;
+    margin-left: 4%!important;
+    margin-top: 2%!important;
+    background: #FFFFFF!important;
+    background-color: #FFFFFF!important;
+    //border-bottom: 1px solid lightgray !important;
+    border-radius: 64px!important;
+    border: 1px solid lightgray!important;
+}
+.logout-icon{
+    font-size: 2.0em;
+    float: left;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.e-email-icon, .e-download-icon{
+    display: inline-grid;
+    float: right;
+    text-align: center;   
+    font-size: 1.2em;
+    margin: 0.5em;  
+    color:#2C4772;
+}
+.float-right{
+    float: right;
+}
+
+.e-value{
+    color:#F08026;
+}
+.toolbar-title{
+    font-size: 1.3rem;
+}
+
+@media only screen and (min-width: 768px) {
+
+.title{
+    font-size: 2.0rem;    
+}
+}
+.platform-core {
+    .content_name{     
+    
+    min-height: 60%;
+    width: 30%;
+    margin: auto;
+
+    }
+}

@@ -1,0 +1,21 @@
+
+<ion-header no-border>
+  <ion-navbar  color="primary"  class="center-text"> 
+    <ion-title>
+      TRANSPORT DIMENSION TOOL
+    </ion-title>
+   <ion-icon color="light" class="share-icon" name="ios-download-outline" (click)="send()" ></ion-icon>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="content-wrapper">
+   <ion-grid class="e-header" align-items-center>
+<ion-row>
+     <ion-col>
+         <section class="chart-wrapper">
+      <canvas #pieChart></canvas>
+   </section>
+     </ion-col>
+   </ion-row>
+   </ion-grid>
+</ion-content>
