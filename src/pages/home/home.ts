@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, App, Platform, AlertController } from 'ionic-angular';
-import {LoginPage} from '../login/login';
-import {EDimmensionProvider} from "../../providers/e-dimmension/e-dimmension";
-import {ChartPage} from '../chart/chart';
+import { LoginPage } from '../login/login';
+import { EDimmensionProvider } from "../../providers/e-dimmension/e-dimmension";
+import { ChartPage } from '../chart/chart';
 import { AppVariables } from "../../config/app-variables";
 
 const NUMBER_REGEXP = /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/;
@@ -42,18 +42,18 @@ export class HomePage {
 
 
   constructor(public navCtrl: NavController,
-    public app: App,    
+    public app: App,
     private plt: Platform,
     private _eDim: EDimmensionProvider,
     private altCtrl: AlertController) {
     this.selectedCarrierList = this.carrierlist.slice(0, this.carrier);
     // pre-load operator configuration information.
     this.operator['Option A'] = AppVariables.OPERATOR_A;
-    this.operator['Option B'] =AppVariables.OPERATOR_B;
+    this.operator['Option B'] = AppVariables.OPERATOR_B;
     this.operator['Option C'] = AppVariables.OPERATOR_C;
 
     this.operator['Manual'] = [];
-   
+
     // define the dafult carriers
     for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
       this.formElements['nCells_' + i] = null;
@@ -74,44 +74,44 @@ export class HomePage {
           name: "nCells_",
           type: '1',
           options: this.nCellsList
-        },{
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 2      
-          }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: this.mimoList
-          }, {
-            label: "QAM",
-            name: "qam_",
-            type: 1,
-            options: this.qamList
-          }
+        }, {
+          label: "Channel BW",
+          name: "chCapacity_",
+          type: 2
+        }, {
+          label: "MIMO",
+          name: "mimo_",
+          type: 1,
+          options: this.mimoList
+        }, {
+          label: "QAM",
+          name: "qam_",
+          type: 1,
+          options: this.qamList
+        }
         ]
-      },{
+      }, {
         name: "LAA", shortname: "laa", fields: [{
           label: "No of Radios",
           name: "nCells_",
           type: '1',
           options: this.nCellsList
-        },{
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 1,
-            options: this.channelCapacityList
-          }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: this.mimoList
-          }, {
-            label: "QAM",
-            name: "qam_",
-            type: 1,
-            options: this.qamList
-          }
+        }, {
+          label: "Channel BW",
+          name: "chCapacity_",
+          type: 1,
+          options: this.channelCapacityList
+        }, {
+          label: "MIMO",
+          name: "mimo_",
+          type: 1,
+          options: this.mimoList
+        }, {
+          label: "QAM",
+          name: "qam_",
+          type: 1,
+          options: this.qamList
+        }
         ]
       },
       {
@@ -121,40 +121,40 @@ export class HomePage {
           type: 1,
           options: this.nCellsList
         }, {
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 1,
-            options: this.channelCapacityList
-          }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: this.mimoList
-          }, {
-            label: "QAM",
-            name: "qam_",
-            type: 1,
-            options: this.qamList
-          }
+          label: "Channel BW",
+          name: "chCapacity_",
+          type: 1,
+          options: this.channelCapacityList
+        }, {
+          label: "MIMO",
+          name: "mimo_",
+          type: 1,
+          options: this.mimoList
+        }, {
+          label: "QAM",
+          name: "qam_",
+          type: 1,
+          options: this.qamList
+        }
         ]
       },
       {
-        name: "Massive MIMO", shortname: "massiveMimo", fields: [ {
-            label: "No of Radios",
-            name: "nCells_",
-            type: 1,
-            options: this.nCellsList
-          },{
+        name: "Massive MIMO", shortname: "massiveMimo", fields: [{
+          label: "No of Radios",
+          name: "nCells_",
+          type: 1,
+          options: this.nCellsList
+        }, {
           label: "MIMO",
           name: "mimo_",
           type: 1,
           options: [{ value: 5.57, name: '32 MIMO' }, { value: 10.4, name: '64 MIMO' }]
         }, {
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 1,
-            options: this.channelCapacityList
-          }]
+          label: "Channel BW",
+          name: "chCapacity_",
+          type: 1,
+          options: this.channelCapacityList
+        }]
       },
       {
         name: "FWA", shortname: "fwa", fields: [{
@@ -163,22 +163,22 @@ export class HomePage {
           type: 1,
           options: this.nCellsList
         },
-          // {
-          //     label: "Band",
-          //     type: 2,
-          //     options: null
-          //   }, 
-          {
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 2,
-            options: null
-          }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: this.mimoList
-          }
+        // {
+        //     label: "Band",
+        //     type: 2,
+        //     options: null
+        //   }, 
+        {
+          label: "Channel BW",
+          name: "chCapacity_",
+          type: 2,
+          options: null
+        }, {
+          label: "MIMO",
+          name: "mimo_",
+          type: 1,
+          options: this.mimoList
+        }
           // , {
           //   label: "Cell Peak",
           //   type: 2,
@@ -193,22 +193,22 @@ export class HomePage {
           type: 1,
           options: this.nCellsList
         },
-          // {
-          //     label: "Band",
-          //     type: 2,
-          //     options: null
-          //   },
-          {
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 2,
-            options: null
-          }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: this.mimoList
-          }
+        // {
+        //     label: "Band",
+        //     type: 2,
+        //     options: null
+        //   },
+        {
+          label: "Channel BW",
+          name: "chCapacity_",
+          type: 2,
+          options: null
+        }, {
+          label: "MIMO",
+          name: "mimo_",
+          type: 1,
+          options: this.mimoList
+        }
           // , {
           //   label: "Cell Peak",
           //   type: 2,
@@ -243,18 +243,18 @@ export class HomePage {
 
   }
   ionViewDidLoad() {
- this.initializeBackButtonCustomHandler();
+    this.initializeBackButtonCustomHandler();
   }
-    ionViewWillLeave() {
-            // Unregister the custom back button action for this page
-            this.unregisterBackButtonAction && this.unregisterBackButtonAction();
-        }
-    
-        initializeBackButtonCustomHandler(): void {
-            this.unregisterBackButtonAction = this.plt.registerBackButtonAction(function(event){
-                console.log('Prevent Back Button Page Change');
-            }, 101); // Priority 101 will override back button handling (we set in app.component.ts) as it is bigger then priority 100 configured in app.component.ts file */
-        }  
+  ionViewWillLeave() {
+    // Unregister the custom back button action for this page
+    this.unregisterBackButtonAction && this.unregisterBackButtonAction();
+  }
+
+  initializeBackButtonCustomHandler(): void {
+    this.unregisterBackButtonAction = this.plt.registerBackButtonAction(function (event) {
+      console.log('Prevent Back Button Page Change');
+    }, 101); // Priority 101 will override back button handling (we set in app.component.ts) as it is bigger then priority 100 configured in app.component.ts file */
+  }
 
   /**
    * Logout
@@ -265,12 +265,12 @@ export class HomePage {
 
   }
 
-  
+
   /**
    * load the operator default configuration
    */
   loadOperator(operator) {
-
+    console.log("asdasd");
     this.carrier = this.operator[operator].length;
     this.onCarrierChange(this.carrier);
     this.selectedCarrierList = this.carrierlist.slice(0, this.carrier);
@@ -346,7 +346,7 @@ export class HomePage {
       this.formElements['cprValue_' + i + '_' + technology] = (typeof this.formElements['cprValue_' + i + '_' + technology] == 'undefined') ? this.cpr : this.formElements['cprValue_' + i + '_' + technology];
 
     }
-     this.getCbValue();
+    this.getCbValue();
   }
   /**
    * All Baseline form value change event.
@@ -385,10 +385,10 @@ export class HomePage {
       this.formElements['icon' + shortName] = "add-circle";
       this.formElements['advanceEditBtn' + shortName] = "Advance Edit";
       this.formElements['advanceEditIcon' + shortName] = "ios-create-outline";
-    //  this.formElements['thresholdValue_' + shortName] = (typeof this.formElements['thresholdValue_' + shortName] == 'undefined') ? 1.17 : this.formElements['thresholdValue_' + shortName];
+      //  this.formElements['thresholdValue_' + shortName] = (typeof this.formElements['thresholdValue_' + shortName] == 'undefined') ? 1.17 : this.formElements['thresholdValue_' + shortName];
       this.formElements['ca_' + shortName] = (typeof this.formElements['ca_' + shortName] == 'undefined') ? 0 : this.formElements['ca_' + shortName];
     });
-     this.getCbValue();
+    this.getCbValue();
   }
 
   /**
@@ -418,7 +418,7 @@ export class HomePage {
    * Calculate the Cb value
    */
   getCbValue() {
-    
+
     this.cb = 0;
     for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
       this.cb += (typeof this.formElements['ca_' + i] == 'undefined') ? 0 : this.formElements['ca_' + i]
@@ -433,7 +433,7 @@ export class HomePage {
         this.cb += (typeof this.formElements['ca_' + c + "_" + item.shortname] == 'undefined') ? 0 : this.formElements['ca_' + c + "_" + item.shortname];
       }
     });
-console.log(this.formElements)
+    console.log(this.formElements)
   }
   /**
    * Load the chart report
@@ -456,14 +456,14 @@ console.log(this.formElements)
     }
 
     this.selectedTechnology.forEach((item, index) => {
-     // let color = this.colors['technology_' + item.shortname];
-     // let hover = "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
+      // let color = this.colors['technology_' + item.shortname];
+      // let hover = "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
       let value = (typeof this.formElements['ca_' + item.shortname] == 'undefined') ? 0 : this.formElements['ca_' + item.shortname];
       let technology = item.name;
       if (value > 0) {
         isValueExist++;
       }
-      report.push({ technology: technology, value: value});
+      report.push({ technology: technology, value: value });
     });
 
     if (isValueExist > 1) {
@@ -505,6 +505,7 @@ console.log(this.formElements)
     let add = (technology) ? ('_' + technology) : '';
 
     if (this.formElements['isShowAdvanceEditable' + item + add]) {
+      console.log("here1");
       this.formElements['isShowAdvanceEditable' + item + add] = false;
       //this.formElements['isShow' + item + add] = false;
       //this.formElements['icon' + item + add] = 'add-circle';
@@ -514,6 +515,7 @@ console.log(this.formElements)
       this.formElements['eMimoValue_' + item + add] = this.formElements['mimoValue_' + item + add];
 
       this.formElements['eTnValue_' + item + add] = this.formElements['thresholdValue_' + item + add];
+
      // this.formElements['cprValue_' + item + add] = this.formElements['cprValue_' + item + add];
 
       this.updateCa(item,technology);
@@ -526,7 +528,9 @@ console.log(this.formElements)
       //  this.formElements['icon' + item + add] = 'remove-circle';
       this.formElements['mimoValue_' + item + add] = (this.formElements['eMimoValue_' + item + add] == null) ? this.formElements['mimo_' + item + add] : this.formElements['eMimoValue_' + item + add];
       this.formElements['thresholdValue_' + item + add] = this.formElements['eTnValue_' + item + add];
-      this.formElements['cprValue_' + item + add] = (technology == null) ? this.cpr : this.cprList.filter(item => item.name === technology)[0].value;
+      if (this.formElements['cprValue_' + item + add] == null) {
+        this.formElements['cprValue_' + item + add] = (technology == null) ? this.cpr : this.cprList.filter(item => item.name === technology)[0].value;
+      }
 
       //let item1 = cprList.filter(item => item.name === technology)[0];
       //console.log("sdfsdf",item1.value);
@@ -536,9 +540,9 @@ console.log(this.formElements)
   /**
    * Update the Ca values
    */
-  updateCa(item: any,technology:any=null) {
+  updateCa(item: any, technology: any = null) {
     let add = (technology) ? ('_' + technology) : '';
-    let concatStr = item+add
+    let concatStr = item + add
     let nCells = this.formElements['nCells_' + concatStr];
     let chCapacity = this.formElements['chCapacity_' + concatStr];
     let qam = this.formElements['qam_' + concatStr];
@@ -548,8 +552,13 @@ console.log(this.formElements)
     let cpr = this.formElements['cprValue_' + concatStr];
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
       this.formElements['ca_' + concatStr] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn, cpr);
+<<<<<<< HEAD
+
+=======
+>>>>>>> a01fcefe75362fbb19f564de215252ccb3e6de60
     }
     this.getCbValue();
+    //this.formElements['cprValue_' + concatStr] = cpr;
   }
   /**
    * Number form field vaildation
