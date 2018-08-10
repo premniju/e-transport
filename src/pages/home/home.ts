@@ -36,7 +36,9 @@ export class HomePage {
   public operator: any = [];
   public tn: any = 1.17;
   public unregisterBackButtonAction: any;
-  public cellPeakRate:any=150;
+
+  public cpr: any = 150;
+  public cprList: any = AppVariables.CPR;
 
 
   constructor(public navCtrl: NavController,
@@ -59,6 +61,7 @@ export class HomePage {
       this.formElements['qam_' + i] = null;
       this.formElements['mimo_' + i] = null;
       this.formElements['ca_' + i] = 0;
+      this.formElements['cprValue_' + i] = this.cpr;
     }
     // define the default technology ca;
     this.formElements['ca_laa'] = 0;
@@ -278,6 +281,7 @@ export class HomePage {
       this.formElements['qam_' + i] = item.qam;
       this.formElements['mimo_' + i] = item.mimo;
       this.formElements['mimoValue_' + i] = this.formElements['mimo_' + i];
+      this.formElements['cprValue_' + i] = item.cpr;
       this.onChange(item.mimo, 'mimo_', i);
 
     });
@@ -313,8 +317,11 @@ export class HomePage {
       this.formElements['advanceEditIcon' + i] = "ios-create-outline";
       this.formElements['eTnValue_' + i] = (typeof this.formElements['eTnValue_' + i] == 'undefined') ? this.tn : this.formElements['eTnValue_' + i];
       this.formElements['eMimoValue_' + i] = (typeof this.formElements['eMimoValue_' + i] == 'undefined') ? this.formElements['mimo_' + i] : this.formElements['eMimoValue_' + i];
-      this.formElements['cellPeakRate_' + i] = (typeof this.formElements['cellPeakRate_' + i] == 'undefined') ? this.cellPeakRate  : this.formElements['cellPeakRate_' + i];
 
+      this.formElements['cprValue_' + i] = (typeof this.formElements['cprValue_' + i] == 'undefined') ? this.cpr : this.formElements['cprValue_' + i];
+      /*console.log(typeof this.formElements['cprValue_' + i]);
+      console.log(this.cpr);
+      console.log(this.formElements['cprValue_' + i]);*/
       this.formElements['ca_' + i] = (typeof this.formElements['ca_' + i] == 'undefined') ? 0 : this.formElements['ca_' + i];
     }
 
@@ -328,15 +335,15 @@ export class HomePage {
     let carrier = this.formElements['carrier_' + technology];
     this.formElements['selectedcarrier_' + technology] = this.carrierlist.slice(0, carrier);
     for (var i = 1; i < (this.formElements['selectedcarrier_' + technology].length + 1); i++) {
-      this.formElements['ca_' + i + "_" + technology] = (typeof this.formElements['ca_' + i+ '_' + technology] == 'undefined') ? 0 : this.formElements['ca_' + i+ '_' + technology];
+      this.formElements['ca_' + i + "_" + technology] = (typeof this.formElements['ca_' + i + '_' + technology] == 'undefined') ? 0 : this.formElements['ca_' + i + '_' + technology];
       this.formElements['isShow' + i + '_' + technology] = false;
       this.formElements['icon' + i + '_' + technology] = "add-circle";
       this.formElements['advanceEditBtn' + i + '_' + technology] = "Advance Edit";
       this.formElements['advanceEditIcon' + i + '_' + technology] = "ios-create-outline";
-      this.formElements['eMimoValue_' + i+ '_' + technology] = (typeof this.formElements['eMimoValue_' + i+ '_' + technology] == 'undefined') ? this.formElements['mimo_' + i+ '_' + technology] : this.formElements['eMimoValue_' + i+ '_' + technology];
-      this.formElements['eTnValue_' + i+ '_' + technology] = (typeof this.formElements['eTnValue_' + i+ '_' + technology] == 'undefined') ? this.tn : this.formElements['eTnValue_' + i+ '_' + technology];
+      this.formElements['eMimoValue_' + i + '_' + technology] = (typeof this.formElements['eMimoValue_' + i + '_' + technology] == 'undefined') ? this.formElements['mimo_' + i + '_' + technology] : this.formElements['eMimoValue_' + i + '_' + technology];
+      this.formElements['eTnValue_' + i + '_' + technology] = (typeof this.formElements['eTnValue_' + i + '_' + technology] == 'undefined') ? this.tn : this.formElements['eTnValue_' + i + '_' + technology];
       this.formElements['thresholdValue_' + i + '_' + technology] = (typeof this.formElements['thresholdValue_' + i + '_' + technology] == 'undefined') ? this.tn : this.formElements['thresholdValue_' + i + '_' + technology];
-      
+      this.formElements['cprValue_' + i + '_' + technology] = (typeof this.formElements['cprValue_' + i + '_' + technology] == 'undefined') ? this.cpr : this.formElements['cprValue_' + i + '_' + technology];
 
     }
      this.getCbValue();
@@ -355,8 +362,9 @@ export class HomePage {
     }
     let mimo = (this.formElements['mimoValue_' + item] != null) ? this.formElements['mimoValue_' + item] : this.formElements['mimo_' + item];
     let tn = this.formElements['thresholdValue_' + item];
+    let cpr = this.formElements['cprValue_' + item];
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
-      this.formElements['ca_' + item] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, tn);
+      this.formElements['ca_' + item] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, tn, cpr);
     }
     this.getCbValue();
 
@@ -399,6 +407,7 @@ export class HomePage {
     }
     let mimo = (this.formElements['mimoValue_' + carrier + '_' + technology] != null) ? this.formElements['mimoValue_' + carrier + '_' + technology] : this.formElements['mimo_' + carrier + '_' + technology];
     let tn = this.formElements['thresholdValue_' + carrier + '_' + technology];
+    let cpr = this.formElements['cprValue_' + carrier + '_' + technology] = (technology == null) ? this.cpr : this.cprList.filter(item => item.name === technology)[0].value;;
 
     if (nCells != null && chCapacity != null && mimo != null) {
       this.formElements['ca_' + carrier + "_" + technology] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn);
@@ -505,16 +514,23 @@ console.log(this.formElements)
       this.formElements['eMimoValue_' + item + add] = this.formElements['mimoValue_' + item + add];
 
       this.formElements['eTnValue_' + item + add] = this.formElements['thresholdValue_' + item + add];
+     // this.formElements['cprValue_' + item + add] = this.formElements['cprValue_' + item + add];
 
       this.updateCa(item,technology);
     } else {
+
       this.formElements['advanceEditBtn' + item + add] = "Save";
       this.formElements['advanceEditIcon' + item + add] = "md-checkmark";
       this.formElements['isShowAdvanceEditable' + item + add] = true;
       //this.formElements['isShow' + item + add] = true;
-    //  this.formElements['icon' + item + add] = 'remove-circle';
-      this.formElements['mimoValue_' + item + add] = (this.formElements['eMimoValue_' + item + add]==null)?this.formElements['mimo_' + item + add]:this.formElements['eMimoValue_' + item + add];
+      //  this.formElements['icon' + item + add] = 'remove-circle';
+      this.formElements['mimoValue_' + item + add] = (this.formElements['eMimoValue_' + item + add] == null) ? this.formElements['mimo_' + item + add] : this.formElements['eMimoValue_' + item + add];
       this.formElements['thresholdValue_' + item + add] = this.formElements['eTnValue_' + item + add];
+      this.formElements['cprValue_' + item + add] = (technology == null) ? this.cpr : this.cprList.filter(item => item.name === technology)[0].value;
+
+      //let item1 = cprList.filter(item => item.name === technology)[0];
+      //console.log("sdfsdf",item1.value);
+
     }
   }
   /**
@@ -529,8 +545,9 @@ console.log(this.formElements)
 
     let mimo = (this.formElements['mimoValue_' + concatStr] != null) ? this.formElements['mimoValue_' + concatStr] : this.formElements['mimo_' + concatStr];
     let tn = this.formElements['thresholdValue_' + concatStr];
+    let cpr = this.formElements['cprValue_' + concatStr];
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
-      this.formElements['ca_' + concatStr] = this._eDim.generateCa(chCapacity, qam, mimo, nCells,technology, tn);
+      this.formElements['ca_' + concatStr] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn, cpr);
     }
     this.getCbValue();
   }
