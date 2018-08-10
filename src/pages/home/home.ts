@@ -515,11 +515,12 @@ export class HomePage {
       this.formElements['eMimoValue_' + item + add] = this.formElements['mimoValue_' + item + add];
 
       this.formElements['eTnValue_' + item + add] = this.formElements['thresholdValue_' + item + add];
-      this.formElements['cprValue_' + item + add] = this.formElements['cprValue_' + item + add];
-      //this.cpr = this.formElements['cprValue_' + item + add];
-      this.updateCa(item, technology);
+
+     // this.formElements['cprValue_' + item + add] = this.formElements['cprValue_' + item + add];
+
+      this.updateCa(item,technology);
     } else {
-      console.log("here2");
+
       this.formElements['advanceEditBtn' + item + add] = "Save";
       this.formElements['advanceEditIcon' + item + add] = "md-checkmark";
       this.formElements['isShowAdvanceEditable' + item + add] = true;
@@ -551,7 +552,10 @@ export class HomePage {
     let cpr = this.formElements['cprValue_' + concatStr];
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
       this.formElements['ca_' + concatStr] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn, cpr);
+<<<<<<< HEAD
 
+=======
+>>>>>>> a01fcefe75362fbb19f564de215252ccb3e6de60
     }
     this.getCbValue();
     //this.formElements['cprValue_' + concatStr] = cpr;
