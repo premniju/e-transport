@@ -48,6 +48,8 @@ export class ChartPage {
     this.colors['Massive MIMO'] = '#E91E63';
     this.colors['FWA'] = '#01673F';
     this.colors['eMBB'] = '#7030A2';
+    this.colors['Manual'] = '#28A745';
+    
   }
 
   ionViewDidLoad() {
