@@ -124,7 +124,7 @@
                 </ion-item>
                 <ion-item>
                   <ion-label>Cell Peak Rate</ion-label>
-                  <ion-input min="0" max="4" required [(ngModel)]="formElements['cellPeakRate_'+item]" type="number"></ion-input>
+                  <ion-input required [(ngModel)]="formElements['cprValue_'+item]" type="number"></ion-input>
                 </ion-item>
               </div>
 
@@ -209,7 +209,7 @@
                   </ion-item>
                   <ion-item>
                   <ion-label>Cell Peak Rate</ion-label>
-                  <ion-input min="0" max="4" required [(ngModel)]="formElements['cellPeakRate_'+c+'_'+item.shortname]" type="number"></ion-input>
+                  <ion-input required [(ngModel)]="formElements['cprValue_'+c+'_'+item.shortname]" type="number"></ion-input>
                 </ion-item>
                 </div>
 
