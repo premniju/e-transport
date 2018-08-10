@@ -319,9 +319,8 @@ export class HomePage {
       this.formElements['eMimoValue_' + i] = (typeof this.formElements['eMimoValue_' + i] == 'undefined') ? this.formElements['mimo_' + i] : this.formElements['eMimoValue_' + i];
 
       this.formElements['cprValue_' + i] = (typeof this.formElements['cprValue_' + i] == 'undefined') ? this.cpr : this.formElements['cprValue_' + i];
-      /*console.log(typeof this.formElements['cprValue_' + i]);
-      console.log(this.cpr);
-      console.log(this.formElements['cprValue_' + i]);*/
+      this.formElements['eCprValue_' + i] = (typeof this.formElements['eCprValue_' + i] == 'undefined') ? this.cpr : this.formElements['eCprValue_' + i];
+     
       this.formElements['ca_' + i] = (typeof this.formElements['ca_' + i] == 'undefined') ? 0 : this.formElements['ca_' + i];
     }
 
@@ -343,7 +342,9 @@ export class HomePage {
       this.formElements['eMimoValue_' + i + '_' + technology] = (typeof this.formElements['eMimoValue_' + i + '_' + technology] == 'undefined') ? this.formElements['mimo_' + i + '_' + technology] : this.formElements['eMimoValue_' + i + '_' + technology];
       this.formElements['eTnValue_' + i + '_' + technology] = (typeof this.formElements['eTnValue_' + i + '_' + technology] == 'undefined') ? this.tn : this.formElements['eTnValue_' + i + '_' + technology];
       this.formElements['thresholdValue_' + i + '_' + technology] = (typeof this.formElements['thresholdValue_' + i + '_' + technology] == 'undefined') ? this.tn : this.formElements['thresholdValue_' + i + '_' + technology];
-      this.formElements['cprValue_' + i + '_' + technology] = (typeof this.formElements['cprValue_' + i + '_' + technology] == 'undefined') ? this.cpr : this.formElements['cprValue_' + i + '_' + technology];
+      this.formElements['cprValue_' + i + '_' + technology] = (typeof this.formElements['cprValue_' + i + '_' + technology] == 'undefined') ? this.cprList.filter(item => item.name === technology)[0].value : this.formElements['cprValue_' + i + '_' + technology];
+
+      this.formElements['eCprValue_' + i + '_' + technology] = (typeof this.formElements['eCprValue_' + i + '_' + technology] == 'undefined') ? this.cprList.filter(item => item.name === technology)[0].value : this.formElements['eCprValue_' + i + '_' + technology];
 
     }
     this.getCbValue();
@@ -407,10 +408,10 @@ export class HomePage {
     }
     let mimo = (this.formElements['mimoValue_' + carrier + '_' + technology] != null) ? this.formElements['mimoValue_' + carrier + '_' + technology] : this.formElements['mimo_' + carrier + '_' + technology];
     let tn = this.formElements['thresholdValue_' + carrier + '_' + technology];
-    let cpr = this.formElements['cprValue_' + carrier + '_' + technology] = (technology == null) ? this.cpr : this.cprList.filter(item => item.name === technology)[0].value;;
+    let cpr = this.formElements['cprValue_' + carrier + '_' + technology] = (this.formElements['cprValue_' + carrier + '_' + technology]!=null)?(this.formElements['cprValue_' + carrier + '_' + technology]):((technology == null) ? this.cpr : this.cprList.filter(item => item.name === technology)[0].value);
 
     if (nCells != null && chCapacity != null && mimo != null) {
-      this.formElements['ca_' + carrier + "_" + technology] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn);
+      this.formElements['ca_' + carrier + "_" + technology] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn,cpr);
       this.getCbValue();
     }
   }
@@ -443,9 +444,7 @@ export class HomePage {
     let report = [];
     let isValueExist = 0;
     for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
-
-      // let color = this.colors['carrier_' + i];
-      // let hover = "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
+      
       let value = (typeof this.formElements['ca_' + i] == 'undefined') ? 0 : this.formElements['ca_' + i];
       let technology = 'Carrier ' + i;
 
@@ -456,8 +455,7 @@ export class HomePage {
     }
 
     this.selectedTechnology.forEach((item, index) => {
-      // let color = this.colors['technology_' + item.shortname];
-      // let hover = "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
+      
       let value = (typeof this.formElements['ca_' + item.shortname] == 'undefined') ? 0 : this.formElements['ca_' + item.shortname];
       let technology = item.name;
       if (value > 0) {
@@ -516,7 +514,7 @@ export class HomePage {
 
       this.formElements['eTnValue_' + item + add] = this.formElements['thresholdValue_' + item + add];
 
-     // this.formElements['cprValue_' + item + add] = this.formElements['cprValue_' + item + add];
+      this.formElements['eCprValue_' + item + add] = this.formElements['cprValue_' + item + add];
 
       this.updateCa(item,technology);
     } else {
@@ -528,13 +526,10 @@ export class HomePage {
       //  this.formElements['icon' + item + add] = 'remove-circle';
       this.formElements['mimoValue_' + item + add] = (this.formElements['eMimoValue_' + item + add] == null) ? this.formElements['mimo_' + item + add] : this.formElements['eMimoValue_' + item + add];
       this.formElements['thresholdValue_' + item + add] = this.formElements['eTnValue_' + item + add];
-      if (this.formElements['cprValue_' + item + add] == null) {
-        this.formElements['cprValue_' + item + add] = (technology == null) ? this.cpr : this.cprList.filter(item => item.name === technology)[0].value;
-      }
+      
+      this.formElements['cprValue_' + item + add] = this.formElements['eCprValue_' + item + add]; 
 
-      //let item1 = cprList.filter(item => item.name === technology)[0];
-      //console.log("sdfsdf",item1.value);
-
+      
     }
   }
   /**
@@ -552,10 +547,6 @@ export class HomePage {
     let cpr = this.formElements['cprValue_' + concatStr];
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
       this.formElements['ca_' + concatStr] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn, cpr);
-<<<<<<< HEAD
-
-=======
->>>>>>> a01fcefe75362fbb19f564de215252ccb3e6de60
     }
     this.getCbValue();
     //this.formElements['cprValue_' + concatStr] = cpr;
