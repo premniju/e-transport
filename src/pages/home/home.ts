@@ -3,7 +3,7 @@ import { NavController, App, Platform, AlertController } from 'ionic-angular';
 import { LoginPage } from '../login/login';
 import { EDimmensionProvider } from "../../providers/e-dimmension/e-dimmension";
 import { ChartPage } from '../chart/chart';
-import { AppVariables } from "../../config/app-variables";
+import { AppVariables,AppVariables_Tech } from "../../config/app-variables";
 
 const NUMBER_REGEXP = /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/;
 @Component({
@@ -65,9 +65,10 @@ export class HomePage {
     }
     // define the default technology ca;
     this.formElements['ca_laa'] = 0;
-
+   // this.technologyList = AppVariables.TECHNOLOGY_LIST;
     // technology input information
-    this.technologyList = [
+    this.technologyList = AppVariables_Tech.TECHNOLOGY_LIST;
+   /* this.technologyList = [
       {
         name: "Manual", shortname: "manual", fields: [{
           label: "No of Radios",
@@ -217,6 +218,7 @@ export class HomePage {
         ]
       }
     ];
+    */
 
     let temp = this.technology;
     this.selectedTechnology = this.technologyList.filter(function (obj) {
