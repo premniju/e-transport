@@ -97,5 +97,7 @@ OPERATOR_C:[{
         qam: 64,
         mimo: 3.15
       }
-    ]
+    ],
+    EXECUTIVE_EMAIL: "nijanthan.p@lnttechservices.com",
+    EMAIL_SUBJECT: "Transport Capacity Dimensioning - Report",
 }

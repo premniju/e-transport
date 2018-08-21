@@ -1,21 +1,34 @@
-
 <ion-header no-border>
-  <ion-navbar  color="primary"  class="center-text"> 
+  <ion-navbar color="primary" class="center-text">
     <ion-title>
       TRANSPORT DIMENSION TOOL
     </ion-title>
-   <ion-icon color="light" class="share-icon" name="ios-download-outline" (click)="send()" ></ion-icon>
+    <ion-icon color="light" class="share-icon" name="ios-download-outline" (click)="generatePdf()"></ion-icon>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="content-wrapper">
-   <ion-grid class="e-header" align-items-center>
-<ion-row>
-     <ion-col>
-         <section class="chart-wrapper">
-      <canvas #pieChart></canvas>
-   </section>
-     </ion-col>
-   </ion-row>
-   </ion-grid>
+  <div id="Html2Pdf">
+  <ion-grid class="e-header" align-items-center>
+    <ion-row>
+      <ion-col>
+        <section class="chart-wrapper">
+          <canvas #pieChart></canvas>
+        </section>
+      </ion-col>
+    </ion-row>
+    <ion-list>
+      <ion-item *ngFor="let row of formData;">
+        <div *ngFor="let col of row;" class="c-list {{col.class}}">
+          {{col.name}} <br/> No of Sectors - {{col.sectors}}<br/> Channel BW - {{col.channelBw}}MHz <br/> MIMO - {{col.mimo}}
+          <br/>
+          <span style="padding-bottom:5px;"> QAM - {{col.qam}}QAM</span> <br/>
+          <span class="c-label"> {{col.ca}}Mbps </span>
+          <br/>
+        </div>
+
+      </ion-item>
+    </ion-list>
+  </ion-grid>
+  </div>
 </ion-content>

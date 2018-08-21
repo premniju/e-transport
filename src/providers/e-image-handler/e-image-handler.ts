@@ -22,6 +22,7 @@ export class EImageHandlerProvider {
 
 pdfObj = null;
 docDefinition:any=[];
+externalDataRetrievedFromServer:any=[];
   constructor(public http: HttpClient,
   private file: File,
   private fileOpener: FileOpener,
@@ -29,9 +30,59 @@ docDefinition:any=[];
   public socialSharing: SocialSharing,
   private plt: Platform) {
     console.log('Hello EImageHandlerProvider Provider');
+    this.externalDataRetrievedFromServer = [
+    { name: 'Bartek', age: 34 },
+    { name: 'John', age: 27 },
+    { name: 'Elizabeth', age: 30 },
+];
+   // console.log(this.imageToBase64('../../assets/imgs/ericsson_logo.png'));
   }
    
+imageToBase64(url)
+{
+    var canvas, ctx, dataURL, base64;
+    var img = new Image();
+    img.src =url;
+    img.onload = function() {
+    canvas = document.createElement("canvas");
+    ctx = canvas.getContext("2d");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+    dataURL = canvas.toDataURL("image/png");
+    base64 = dataURL.replace(/^data:image\/png;base64,/, "");
+    return base64;
+     }
+}
 
+
+
+buildTableBody(data, columns) {
+    var body = [];
+
+  //  body.push(columns);
+
+    data.forEach(function(row) {
+        var dataRow = [];
+
+        columns.forEach(function(column) {
+            dataRow.push(row[column].toString());
+        })
+
+        body.push(dataRow);
+    });
+
+    return body;
+}
+
+table(data, columns) {
+    return {
+        table: {
+            headerRows: 1,
+            body: this.buildTableBody(data, columns)
+        }
+    };
+}
   downloadPdf(b64Data) {
   
       
@@ -69,14 +120,21 @@ docDefinition:any=[];
               // document.body.appendChild(a);
               // a.click();
 
-    
+   
  this.docDefinition = {
+      // header: function(currentPage, pageCount, pageSize) {
+      //       return [
+      //           { image: this.imageToBase64('../../assets/imgs/ericsson_logo.png'), height: 30, width: 100 }
+      //       ]
+      //   },
       content: [
         { text: 'TRANSPORT DIMENSION TOOL', style: 'header' },      
 
         { image: b64Data,
       alignment: 'center',
       fit: [400, 400] }, 
+      this.table(this.externalDataRetrievedFromServer, ['name', 'age'])
+      
 
        
  

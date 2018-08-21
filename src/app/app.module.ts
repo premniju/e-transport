@@ -18,6 +18,7 @@ import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
 import { EDimmensionProvider } from '../providers/e-dimmension/e-dimmension';
 import {SocialSharing} from '@ionic-native/social-sharing';
+import { EPdfProvider } from '../providers/e-pdf/e-pdf';
 @NgModule({
   declarations: [
     MyApp,
@@ -51,7 +52,8 @@ import {SocialSharing} from '@ionic-native/social-sharing';
     EImageHandlerProvider,
     File,
     FileOpener,
-    EDimmensionProvider
+    EDimmensionProvider,
+    EPdfProvider
   ]
 })
 export class AppModule {}

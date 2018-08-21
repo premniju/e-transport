@@ -22,8 +22,12 @@ export class EMailProvider {
     attachment: string,
     subject: string,
     body: string): void {
-    console.log(attachment)
-
+    
+let filename         = 'report.png';
+    let base64parts = attachment.split(',');
+base64parts[0] = "base64:" + filename + "//";
+let compatableAttachment =  base64parts.join("");
+console.log(compatableAttachment)
     this.emailComposer.isAvailable().then((available: boolean) => {
 
 
@@ -35,7 +39,7 @@ export class EMailProvider {
             cc: cc,
             bcc: bcc,
             attachments: [
-              attachment
+              compatableAttachment
             ],
             subject: subject,
             body: body,

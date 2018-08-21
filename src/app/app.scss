@@ -96,8 +96,15 @@
     .content_name{     
     
     min-height: 60%;
-    width: 30%;
+    width: 35%;
     margin: auto;
 
+    }
+    .browser-view{
+    width:60% !important;
+    float:left;
+    }
+    .toolbar-title{
+        font-size:1.8rem !important;
     }
 }

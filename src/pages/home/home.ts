@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, App, Platform, AlertController } from 'ionic-angular';
 import { LoginPage } from '../login/login';
 import { EDimmensionProvider } from "../../providers/e-dimmension/e-dimmension";
 import { ChartPage } from '../chart/chart';
 import { AppVariables } from "../../config/app-variables";
+import { Chart } from 'chart.js';
+import { EMailProvider } from '../../providers/e-mail/e-mail';
 
 const NUMBER_REGEXP = /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/;
 @Component({
@@ -11,7 +13,7 @@ const NUMBER_REGEXP = /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/;
   templateUrl: 'home.html'
 })
 export class HomePage {
-
+  @ViewChild('pieChart') pieChart;
 
   public imageUrl: any;
   public customer: string = "ATT";
@@ -26,12 +28,11 @@ export class HomePage {
   public selectedTechnology: any = [];
   public customerList: any = AppVariables.OPERATOR;
   public carrierlist: any = AppVariables.NCARRIERS;
-  public config: any = null;
+  public config: any = 'Option A';
   public nCellsList: any = AppVariables.NCELLS;
   public qamList: any = AppVariables.QAM;
   public channelCapacityList: any = AppVariables.CHANNEL_CAPACITY;
   public mimoList: any = AppVariables.MIMO;
-  public colors: any = [];
   public showDetails: Boolean = false;
   public operator: any = [];
   public tn: any = 1.17;
@@ -41,11 +42,26 @@ export class HomePage {
   public cprList: any = AppVariables.CPR;
 
 
+  public pieChartEl: any;
+  public barChartEl: any;
+  public lineChartEl: any;
+  public chartLabels: any = [];
+  public chartValues: any = [];
+  public chartColours: any = [];
+  public chartHoverColours: any = [];
+  public chartLoading: any;
+  public colors: any = [];
+  public report: any = [];
+  public formData: any = [];
+  public isApp: Boolean;
+
+
   constructor(public navCtrl: NavController,
     public app: App,
     private plt: Platform,
     private _eDim: EDimmensionProvider,
-    private altCtrl: AlertController) {
+    private altCtrl: AlertController,
+    private _email: EMailProvider) {
     this.selectedCarrierList = this.carrierlist.slice(0, this.carrier);
     // pre-load operator configuration information.
     this.operator['Option A'] = AppVariables.OPERATOR_A;
@@ -53,6 +69,28 @@ export class HomePage {
     this.operator['Option C'] = AppVariables.OPERATOR_C;
 
     this.operator['Manual'] = [];
+
+
+
+    // color code for the charts
+    this.colors['Carrier 1'] = '#FFC939';
+    this.colors['Carrier 2'] = '#F6702E';
+    this.colors['Carrier 3'] = '#F26762';
+    this.colors['Carrier 4'] = '#760C16';
+    this.colors['Carrier 5'] = '#EF3529';
+    this.colors['Carrier 6'] = '#CCCCFF';
+    this.colors['LAA'] = '#0072A8';
+    this.colors['5G Small cell'] = '#438F9D';
+    this.colors['Massive MIMO'] = '#E91E63';
+    this.colors['FWA'] = '#01673F';
+    this.colors['eMBB'] = '#7030A2';
+    this.colors['Manual'] = '#28A745';
+
+    if (this.plt.is('core')) {
+      this.isApp = false;
+    } else {
+      this.isApp = true;
+    }
 
     // define the dafult carriers
     for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
@@ -75,20 +113,20 @@ export class HomePage {
           type: '1',
           options: this.nCellsList
         }, {
-          label: "Channel BW",
-          name: "chCapacity_",
-          type: 2
-        }, {
-          label: "MIMO",
-          name: "mimo_",
-          type: 1,
-          options: this.mimoList
-        }, {
-          label: "QAM",
-          name: "qam_",
-          type: 1,
-          options: this.qamList
-        }
+            label: "Channel BW",
+            name: "chCapacity_",
+            type: 2
+          }, {
+            label: "MIMO",
+            name: "mimo_",
+            type: 1,
+            options: this.mimoList
+          }, {
+            label: "QAM",
+            name: "qam_",
+            type: 1,
+            options: this.qamList
+          }
         ]
       }, {
         name: "LAA", shortname: "laa", fields: [{
@@ -97,21 +135,21 @@ export class HomePage {
           type: '1',
           options: this.nCellsList
         }, {
-          label: "Channel BW",
-          name: "chCapacity_",
-          type: 1,
-          options: this.channelCapacityList
-        }, {
-          label: "MIMO",
-          name: "mimo_",
-          type: 1,
-          options: this.mimoList
-        }, {
-          label: "QAM",
-          name: "qam_",
-          type: 1,
-          options: this.qamList
-        }
+            label: "Channel BW",
+            name: "chCapacity_",
+            type: 1,
+            options: this.channelCapacityList
+          }, {
+            label: "MIMO",
+            name: "mimo_",
+            type: 1,
+            options: this.mimoList
+          }, {
+            label: "QAM",
+            name: "qam_",
+            type: 1,
+            options: this.qamList
+          }
         ]
       },
       {
@@ -121,21 +159,21 @@ export class HomePage {
           type: 1,
           options: this.nCellsList
         }, {
-          label: "Channel BW",
-          name: "chCapacity_",
-          type: 1,
-          options: this.channelCapacityList
-        }, {
-          label: "MIMO",
-          name: "mimo_",
-          type: 1,
-          options: this.mimoList
-        }, {
-          label: "QAM",
-          name: "qam_",
-          type: 1,
-          options: this.qamList
-        }
+            label: "Channel BW",
+            name: "chCapacity_",
+            type: 1,
+            options: this.channelCapacityList
+          }, {
+            label: "MIMO",
+            name: "mimo_",
+            type: 1,
+            options: this.mimoList
+          }, {
+            label: "QAM",
+            name: "qam_",
+            type: 1,
+            options: this.qamList
+          }
         ]
       },
       {
@@ -145,16 +183,16 @@ export class HomePage {
           type: 1,
           options: this.nCellsList
         }, {
-          label: "MIMO",
-          name: "mimo_",
-          type: 1,
-          options: [{ value: 5.57, name: '32 MIMO' }, { value: 10.4, name: '64 MIMO' }]
-        }, {
-          label: "Channel BW",
-          name: "chCapacity_",
-          type: 1,
-          options: this.channelCapacityList
-        }]
+            label: "MIMO",
+            name: "mimo_",
+            type: 1,
+            options: [{ value: 5.57, name: '32 MIMO' }, { value: 10.4, name: '64 MIMO' }]
+          }, {
+            label: "Channel BW",
+            name: "chCapacity_",
+            type: 1,
+            options: this.channelCapacityList
+          }]
       },
       {
         name: "FWA", shortname: "fwa", fields: [{
@@ -163,22 +201,22 @@ export class HomePage {
           type: 1,
           options: this.nCellsList
         },
-        // {
-        //     label: "Band",
-        //     type: 2,
-        //     options: null
-        //   }, 
-        {
-          label: "Channel BW",
-          name: "chCapacity_",
-          type: 2,
-          options: null
-        }, {
-          label: "MIMO",
-          name: "mimo_",
-          type: 1,
-          options: this.mimoList
-        }
+          // {
+          //     label: "Band",
+          //     type: 2,
+          //     options: null
+          //   }, 
+          {
+            label: "Channel BW",
+            name: "chCapacity_",
+            type: 2,
+            options: null
+          }, {
+            label: "MIMO",
+            name: "mimo_",
+            type: 1,
+            options: this.mimoList
+          }
           // , {
           //   label: "Cell Peak",
           //   type: 2,
@@ -193,22 +231,22 @@ export class HomePage {
           type: 1,
           options: this.nCellsList
         },
-        // {
-        //     label: "Band",
-        //     type: 2,
-        //     options: null
-        //   },
-        {
-          label: "Channel BW",
-          name: "chCapacity_",
-          type: 2,
-          options: null
-        }, {
-          label: "MIMO",
-          name: "mimo_",
-          type: 1,
-          options: this.mimoList
-        }
+          // {
+          //     label: "Band",
+          //     type: 2,
+          //     options: null
+          //   },
+          {
+            label: "Channel BW",
+            name: "chCapacity_",
+            type: 2,
+            options: null
+          }, {
+            label: "MIMO",
+            name: "mimo_",
+            type: 1,
+            options: this.mimoList
+          }
           // , {
           //   label: "Cell Peak",
           //   type: 2,
@@ -240,10 +278,14 @@ export class HomePage {
     });
 
     this.customClass = (this.plt.is('core') || this.plt.is('mobileweb')) ? "browser-view" : null;
-
+    this.onCustomerChange('Option A');
   }
   ionViewDidLoad() {
     this.initializeBackButtonCustomHandler();
+    if (!this.isApp) {
+      this.showchart();
+    }
+
   }
   ionViewWillLeave() {
     // Unregister the custom back button action for this page
@@ -308,6 +350,7 @@ export class HomePage {
   onCarrierChange(selectedValue: any) {
 
     this.selectedCarrierList = this.carrierlist.slice(0, this.carrier);
+    this.formElements['selectedCarrier'] = this.carrier;
     for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
 
       this.formElements['thresholdValue_' + i] = (typeof this.formElements['thresholdValue_' + i] == 'undefined') ? this.tn : this.formElements['thresholdValue_' + i];
@@ -320,7 +363,7 @@ export class HomePage {
 
       this.formElements['cprValue_' + i] = (typeof this.formElements['cprValue_' + i] == 'undefined') ? this.cpr : this.formElements['cprValue_' + i];
       this.formElements['eCprValue_' + i] = (typeof this.formElements['eCprValue_' + i] == 'undefined') ? this.cpr : this.formElements['eCprValue_' + i];
-     
+
       this.formElements['ca_' + i] = (typeof this.formElements['ca_' + i] == 'undefined') ? 0 : this.formElements['ca_' + i];
     }
 
@@ -380,13 +423,12 @@ export class HomePage {
     this.selectedTechnology = this.technologyList.filter(function (obj) {
       return (temp.indexOf(obj.name) > -1);
     });
-
+    this.formElements['selectedTechnologies'] = this.selectedTechnology;
     this.selectedTechnology.forEach((item, index) => {
       let shortName = item.shortname;
       this.formElements['icon' + shortName] = "add-circle";
       this.formElements['advanceEditBtn' + shortName] = "Advance Edit";
-      this.formElements['advanceEditIcon' + shortName] = "ios-create-outline";
-      //  this.formElements['thresholdValue_' + shortName] = (typeof this.formElements['thresholdValue_' + shortName] == 'undefined') ? 1.17 : this.formElements['thresholdValue_' + shortName];
+      this.formElements['advanceEditIcon' + shortName] = "ios-create-outline";      
       this.formElements['ca_' + shortName] = (typeof this.formElements['ca_' + shortName] == 'undefined') ? 0 : this.formElements['ca_' + shortName];
     });
     this.getCbValue();
@@ -408,10 +450,10 @@ export class HomePage {
     }
     let mimo = (this.formElements['mimoValue_' + carrier + '_' + technology] != null) ? this.formElements['mimoValue_' + carrier + '_' + technology] : this.formElements['mimo_' + carrier + '_' + technology];
     let tn = this.formElements['thresholdValue_' + carrier + '_' + technology];
-    let cpr = this.formElements['cprValue_' + carrier + '_' + technology] = (this.formElements['cprValue_' + carrier + '_' + technology]!=null)?(this.formElements['cprValue_' + carrier + '_' + technology]):((technology == null) ? this.cpr : this.cprList.filter(item => item.name === technology)[0].value);
+    let cpr = this.formElements['cprValue_' + carrier + '_' + technology] = (this.formElements['cprValue_' + carrier + '_' + technology] != null) ? (this.formElements['cprValue_' + carrier + '_' + technology]) : ((technology == null) ? this.cpr : this.cprList.filter(item => item.name === technology)[0].value);
 
     if (nCells != null && chCapacity != null && mimo != null) {
-      this.formElements['ca_' + carrier + "_" + technology] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn,cpr);
+      this.formElements['ca_' + carrier + "_" + technology] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn, cpr);
       this.getCbValue();
     }
   }
@@ -434,48 +476,52 @@ export class HomePage {
         this.cb += (typeof this.formElements['ca_' + c + "_" + item.shortname] == 'undefined') ? 0 : this.formElements['ca_' + c + "_" + item.shortname];
       }
     });
-    console.log(this.formElements)
+
+
   }
   /**
    * Load the chart report
    */
   loadChart() {
 
-    let report = [];
-    let isValueExist = 0;
-    for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
-      
-      let value = (typeof this.formElements['ca_' + i] == 'undefined') ? 0 : this.formElements['ca_' + i];
-      let technology = 'Carrier ' + i;
-
-      if (value > 0) {
-        isValueExist++;
-      }
-      report.push({ technology: technology, value: value });
-    }
-
-    this.selectedTechnology.forEach((item, index) => {
-      
-      let value = (typeof this.formElements['ca_' + item.shortname] == 'undefined') ? 0 : this.formElements['ca_' + item.shortname];
-      let technology = item.name;
-      if (value > 0) {
-        isValueExist++;
-      }
-      report.push({ technology: technology, value: value });
-    });
-
-    if (isValueExist > 1) {
-      this.navCtrl.push(ChartPage, { 'report': report });
+    if (!this.isApp) {
+      this.showchart();
     } else {
+      let report = [];
+      let isValueExist = 0;
+      for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
 
-      this.altCtrl.create({
-        title: 'Alert',
-        subTitle: "Minimum two carriers / technology infomartion is required to view graph!!",
-        buttons: ['OK']
-      }).present();
+        let value = (typeof this.formElements['ca_' + i] == 'undefined') ? 0 : this.formElements['ca_' + i];
+        let technology = 'Carrier ' + i;
+
+        if (value > 0) {
+          isValueExist++;
+        }
+        report.push({ technology: technology, value: value });
+      }
+
+      this.selectedTechnology.forEach((item, index) => {
+
+        let value = (typeof this.formElements['ca_' + item.shortname] == 'undefined') ? 0 : this.formElements['ca_' + item.shortname];
+        let technology = item.name;
+        if (value > 0) {
+          isValueExist++;
+        }
+        report.push({ technology: technology, value: value });
+      });
+
+      if (isValueExist > 1) {
+        this.navCtrl.push(ChartPage, { 'report': report, 'formdata': this.formElements });
+      } else {
+
+        this.altCtrl.create({
+          title: 'Alert',
+          subTitle: "Minimum two carriers / technology infomartion is required to view graph!!",
+          buttons: ['OK']
+        }).present();
+      }
+
     }
-
-
   }
   /**
    * Form Hide/Show toggle 
@@ -504,9 +550,7 @@ export class HomePage {
 
     if (this.formElements['isShowAdvanceEditable' + item + add]) {
       console.log("here1");
-      this.formElements['isShowAdvanceEditable' + item + add] = false;
-      //this.formElements['isShow' + item + add] = false;
-      //this.formElements['icon' + item + add] = 'add-circle';
+      this.formElements['isShowAdvanceEditable' + item + add] = false;      
       this.formElements['advanceEditBtn' + item + add] = "Advance Edit";
       this.formElements['advanceEditIcon' + item + add] = "ios-create-outline";
 
@@ -516,20 +560,18 @@ export class HomePage {
 
       this.formElements['eCprValue_' + item + add] = this.formElements['cprValue_' + item + add];
 
-      this.updateCa(item,technology);
+      this.updateCa(item, technology);
     } else {
 
       this.formElements['advanceEditBtn' + item + add] = "Save";
       this.formElements['advanceEditIcon' + item + add] = "md-checkmark";
-      this.formElements['isShowAdvanceEditable' + item + add] = true;
-      //this.formElements['isShow' + item + add] = true;
-      //  this.formElements['icon' + item + add] = 'remove-circle';
+      this.formElements['isShowAdvanceEditable' + item + add] = true;     
       this.formElements['mimoValue_' + item + add] = (this.formElements['eMimoValue_' + item + add] == null) ? this.formElements['mimo_' + item + add] : this.formElements['eMimoValue_' + item + add];
       this.formElements['thresholdValue_' + item + add] = this.formElements['eTnValue_' + item + add];
-      
-      this.formElements['cprValue_' + item + add] = this.formElements['eCprValue_' + item + add]; 
 
-      
+      this.formElements['cprValue_' + item + add] = this.formElements['eCprValue_' + item + add];
+
+
     }
   }
   /**
@@ -564,6 +606,159 @@ export class HomePage {
     }
   }
 
+  showchart() {
+    this.defineChartData();
+    this.createPieChart();
+    this.formData = [];
+    let data = [];
+    for (let i = 1; i <= this.formElements.selectedCarrier; i++) {
+
+      let chCapacity = this.formElements["chCapacity_" + i];
+      let qam = this.formElements["qam_" + i];
+      let nCell = this.formElements["nCells_" + i];
+      let mimoValue = this.formElements["mimo_" + i];
+      let carrier = "Carrier " + i;
+      let ca = this.formElements["ca_" + i];
+      let mimoName = AppVariables.MIMO.filter(item => item.value === mimoValue);
+      let mimo = (mimoName.length > 0) ? AppVariables.MIMO.filter(item => item.value === mimoValue)[0].name : null;
+      data.push({ name: carrier, sectors: nCell, channelBw: chCapacity, mimo: mimo, qam: qam, ca: ca, class: ('c-' + i) });
+      if (data.length == 2) {
+        this.formData.push(data);
+        data = [];
+      }
+    }
+
+    if (this.formElements['selectedTechnologies']) {
+      for (let s = 0; s < this.formElements['selectedTechnologies'].length; s++) {
+
+        let techShortName = this.formElements.selectedTechnologies[s].shortname;
+        let technology = this.formElements.selectedTechnologies[s].name;
+
+        if (this.formElements['selectedcarrier_' + techShortName]) {
+
+          for (let t = 1; t <= this.formElements['selectedcarrier_' + techShortName].length; t++) {
+
+            let chCapacity = this.formElements["chCapacity_" + t + "_" + techShortName];
+            let qam = this.formElements["qam_" + t + "_" + techShortName];
+            let nCell = this.formElements["nCells_" + t + "_" + techShortName];
+            let mimoValue = this.formElements["mimo_" + t + "_" + techShortName];
+            let carrier = "Carrier " + t + " " + technology;
+            let ca = this.formElements["ca_" + t + "_" + techShortName];
+            console.log(AppVariables.MIMO.filter(item => item.value === parseFloat(mimoValue)));
+            let mimoName = AppVariables.MIMO.filter(item => item.value === parseFloat(mimoValue));
+            console.log(mimoName)
+            let mimo = (mimoName.length == 0) ? null : mimoName[0].name;
+            if (ca > 0)
+              data.push({ name: carrier, sectors: nCell, channelBw: chCapacity, mimo: mimo, qam: qam, ca: ca, class: ('c-' + techShortName) });
+            if (data.length == 2) {
+              this.formData.push(data);
+              data = [];
+            }
+          }
+        }
+      }
+    }
+    this.formData.push(data);
+
+  }
+
+
+  defineChartData() {
+
+    this.report = [];
+    
+    for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
+
+      let value = (typeof this.formElements['ca_' + i] == 'undefined') ? 500 : this.formElements['ca_' + i];
+      let technology = 'Carrier ' + i;     
+      this.report.push({ technology: technology, value: value });
+    }
+
+    this.selectedTechnology.forEach((item, index) => {
+
+      let value = (typeof this.formElements['ca_' + item.shortname] == 'undefined') ? 0 : this.formElements['ca_' + item.shortname];
+      let technology = item.name;      
+      this.report.push({ technology: technology, value: value });
+    });
+
+    let k: any;
+    this.chartLabels = [];
+    this.chartValues = [];
+    this.chartColours = [];
+    for (k in this.report) {
+
+      var tech = this.report[k];
+
+
+      this.chartLabels.push(tech.technology);
+      this.chartValues.push(tech.value);
+      this.chartColours.push(this.colors[tech.technology]);
+
+    }
+
+  }
+
+  createPieChart() {
+    if (this.pieChartEl !== undefined)
+      this.pieChartEl.destroy();
+    this.pieChartEl = new Chart(this.pieChart.nativeElement,
+      {
+        type: 'pie',
+        data: {
+          labels: this.chartLabels,
+          datasets: [{
+            label: 'Daily Technology usage',
+            data: this.chartValues,
+            duration: 2000,
+            easing: 'easeInQuart',
+            backgroundColor: this.chartColours,            
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              left: 50,
+              right: 0,
+              top: 0,
+              bottom: 0
+            }
+          },
+          animation: {
+            duration: 5000
+          },
+          legend: {
+            display: false            
+          }
+        }
+      });
+
+    this.chartLoading = this.pieChartEl.generateLegend();
+  }
+  getValueAtIndexOrDefault = (value, index, defaultValue) => {
+    if (value === undefined || value === null) {
+      return defaultValue;
+    }
+
+    if (this.isArray(value)) {
+      return index < value.length ? value[index] : defaultValue;
+    }
+
+    return value;
+  };
+
+  isArray = Array.isArray ?
+    function (obj) {
+      return Array.isArray(obj);
+    } :
+    function (obj) {
+      return Object.prototype.toString.call(obj) === '[object Array]';
+    };
+
+  sendMail() {
+  let attachment = this.pieChartEl.toBase64Image();
+    this._email.sendMail(AppVariables.EXECUTIVE_EMAIL, AppVariables.EXECUTIVE_EMAIL, AppVariables.EXECUTIVE_EMAIL,attachment, AppVariables.EMAIL_SUBJECT, null);
+  }
 
 
 

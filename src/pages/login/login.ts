@@ -42,11 +42,11 @@ export class LoginPage {
           if (this.responseData.success) {
             localStorage.setItem('userData', JSON.stringify(this.responseData.user));
              
-             if(this.plt.is('core')){
-               this.navCtrl.push(DashboardPage);
-             }else{
+            //  if(this.plt.is('core')){
+            //    this.navCtrl.push(DashboardPage);
+            //  }else{
                 this.navCtrl.push(HomePage);
-             }
+            //  }
             
           } else {
              this.showError(this.responseData.message);
