@@ -3,7 +3,7 @@ import { NavController, App, Platform, AlertController } from 'ionic-angular';
 import { LoginPage } from '../login/login';
 import { EDimmensionProvider } from "../../providers/e-dimmension/e-dimmension";
 import { ChartPage } from '../chart/chart';
-import { AppVariables } from "../../config/app-variables";
+import { AppVariables,AppVariables_Tech } from "../../config/app-variables";
 import { Chart } from 'chart.js';
 import { EMailProvider } from '../../providers/e-mail/e-mail';
 
@@ -103,159 +103,10 @@ export class HomePage {
     }
     // define the default technology ca;
     this.formElements['ca_laa'] = 0;
-
+   // this.technologyList = AppVariables.TECHNOLOGY_LIST;
     // technology input information
-    this.technologyList = [
-      {
-        name: "Manual", shortname: "manual", fields: [{
-          label: "No of Radios",
-          name: "nCells_",
-          type: '1',
-          options: this.nCellsList
-        }, {
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 2
-          }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: this.mimoList
-          }, {
-            label: "QAM",
-            name: "qam_",
-            type: 1,
-            options: this.qamList
-          }
-        ]
-      }, {
-        name: "LAA", shortname: "laa", fields: [{
-          label: "No of Radios",
-          name: "nCells_",
-          type: '1',
-          options: this.nCellsList
-        }, {
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 1,
-            options: this.channelCapacityList
-          }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: this.mimoList
-          }, {
-            label: "QAM",
-            name: "qam_",
-            type: 1,
-            options: this.qamList
-          }
-        ]
-      },
-      {
-        name: "5G Small cell", shortname: "smallCell", fields: [{
-          label: "No of Radios",
-          name: "nCells_",
-          type: 1,
-          options: this.nCellsList
-        }, {
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 1,
-            options: this.channelCapacityList
-          }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: this.mimoList
-          }, {
-            label: "QAM",
-            name: "qam_",
-            type: 1,
-            options: this.qamList
-          }
-        ]
-      },
-      {
-        name: "Massive MIMO", shortname: "massiveMimo", fields: [{
-          label: "No of Radios",
-          name: "nCells_",
-          type: 1,
-          options: this.nCellsList
-        }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: [{ value: 5.57, name: '32 MIMO' }, { value: 10.4, name: '64 MIMO' }]
-          }, {
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 1,
-            options: this.channelCapacityList
-          }]
-      },
-      {
-        name: "FWA", shortname: "fwa", fields: [{
-          label: "No of Radios",
-          name: "nCells_",
-          type: 1,
-          options: this.nCellsList
-        },
-          // {
-          //     label: "Band",
-          //     type: 2,
-          //     options: null
-          //   }, 
-          {
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 2,
-            options: null
-          }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: this.mimoList
-          }
-          // , {
-          //   label: "Cell Peak",
-          //   type: 2,
-          //   options: null
-          // }
-        ]
-      },
-      {
-        name: "eMBB", shortname: "embb", fields: [{
-          label: "No of Radios",
-          name: "nCells_",
-          type: 1,
-          options: this.nCellsList
-        },
-          // {
-          //     label: "Band",
-          //     type: 2,
-          //     options: null
-          //   },
-          {
-            label: "Channel BW",
-            name: "chCapacity_",
-            type: 2,
-            options: null
-          }, {
-            label: "MIMO",
-            name: "mimo_",
-            type: 1,
-            options: this.mimoList
-          }
-          // , {
-          //   label: "Cell Peak",
-          //   type: 2,
-          //   options: null
-          // }
-        ]
-      }
-    ];
-
+    this.technologyList = AppVariables_Tech.TECHNOLOGY_LIST;
+   
     let temp = this.technology;
     this.selectedTechnology = this.technologyList.filter(function (obj) {
       return (temp.indexOf(obj.name) > -1);
