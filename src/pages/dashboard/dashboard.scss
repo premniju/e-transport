@@ -6,8 +6,50 @@ page-dashboard {
     color: #000000;
     }
     .header{
-        border-top:1px solid grey;
-        border-bottom:1px solid grey;
+        border-top:1px solid #dedede;
+         border-bottom:2px solid #dedede;
+         color:#173253;
+         font-weight: bold;
 
     }
+    .mail-icon {
+	float: right;
+	margin-right: 10px;
+    font-size: 2.0em;
+    font-weight: bold;
+}
+.radio{
+    // padding-right: 10px;
+    padding-left: 5px;
+    vertical-align:middle;
+}
+.e-row{
+    border-bottom: 1px solid #dedede;
+}
+.e-checkbox{
+    float: right;
+    margin: -14px 0 10px
+}
+.e-heading{
+    background-color: #F8F8F8;
+    border: 1px solid #dedede;
+    color:#173253;
+    // font-weight: bold;
+    font-size: 2.0rem;
+}
+.e-body{
+    border: 1px solid #dedede;
+}
+.e-border-right{    
+    border-right: 1px solid #dedede;
+}
+.e-border-bottom{
+     border-bottom: 1px solid #dedede;
+}
+.e-border-left{
+     border-left: 1px solid #dedede;
+}
+.add-row-btn{
+    border-width: 0 !important;
+}
 }

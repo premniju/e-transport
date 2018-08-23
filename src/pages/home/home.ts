@@ -607,7 +607,11 @@ export class HomePage {
     };
 
   sendMail() {
+    var canvas : any =document.getElementById("pieChart");
+  //  console.log(canvas)
+      var ctx=canvas.getContext("2d");
   let attachment = this.pieChartEl.toBase64Image();
+  //console.log(ctx.getImageData(0,0,224,300));
     this._email.sendMail(AppVariables.EXECUTIVE_EMAIL, AppVariables.EXECUTIVE_EMAIL, AppVariables.EXECUTIVE_EMAIL,attachment, AppVariables.EMAIL_SUBJECT, null);
   }
 

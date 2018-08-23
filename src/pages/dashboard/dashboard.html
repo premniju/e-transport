@@ -17,6 +17,7 @@
     font-size: 1.2em;">ERICSSON</span>TRANSPORT DIMENSION TOOL</ion-title>
     <ion-icon color="light" class="logout-icon" name="log-out" (click)="logout()" style="float: right;
     margin-right: 20px;"></ion-icon>
+    <ion-icon color="light" class="mail-icon" name="mail"  (click)="sendMail()"></ion-icon>
   </ion-navbar>
 
 </ion-header>
@@ -26,30 +27,31 @@
   <ion-grid>
     <ion-row>
       <ion-col col-9>
-        <ion-grid class="border">
-          <ion-row>
+        <ion-grid class="">
+          <ion-row class="e-heading">
             <ion-col>
               <ion-label>Baseline
-                <span class="float-right">Total</span>
+                <span class="float-right">Total: {{ cb }}</span>
               </ion-label>
-
-
             </ion-col>
           </ion-row>
-          <ion-row class="header">
+          <div class="e-body">         
+          <ion-row >
             <ion-col>
               <div>
-                <div>Load Configuration</div>
-                <ion-list radio-group [(ngModel)]="config" (ionChange)="onCustomerChange1($event)">
-                  <ion-radio value="Option A" checked></ion-radio>Option A
-                  <ion-radio value="Option B"></ion-radio> Option B
-                  <ion-radio value="Option C"></ion-radio> Option C
-                  <ion-radio value="Option M"></ion-radio> Manual
+                <div class="float-left">Load Configuration</div>
+                <ion-list class="float-right" radio-group [(ngModel)]="config" (ionChange)="onOperatorChange($event)">
+                  <ion-radio value="A" checked></ion-radio><span class="radio">Option A</span>
+                  <ion-radio value="B"></ion-radio><span class="radio">Option B</span>
+                  <ion-radio value="C"></ion-radio><span class="radio">Option C</span>
+                  <ion-radio value="M"></ion-radio><span class="radio">Manual</span>
                 </ion-list>
               </div>
+               
 
             </ion-col>
           </ion-row>
+          <div>Total Number of Carriers {{carrier}}</div>
           <ion-row class="header">
 
             <ion-col>
@@ -75,31 +77,31 @@
             </ion-col>
           </ion-row>
           <div *ngIf="config">
-            <div *ngFor="let item of carrierlist">
-              <ion-row>
+            <div *ngFor="let item of selectedCarrierList">
+              <ion-row class="e-row">
                 <ion-col align-self-center>
                   <ion-label>{{item}}</ion-label>
                 </ion-col>
-                <ion-col>
-                  <select [(ngModel)]="formElements['chCapacity_'+item]">
+                <ion-col align-self-center>
+                  <select [(ngModel)]="baseline['chCapacity_'+item]" (change)="onBaselineChange(baseline['chCapacity_'+item],'chCapacity_',item)">
                     <option *ngFor="let channel of channelCapacityList" value="{{channel.value}}">{{channel.name}}</option>
                   </select>
                 </ion-col>
 
-                <ion-col>
-                  <select [(ngModel)]="formElements['mimo_'+item]">
+                <ion-col align-self-center>
+                  <select [(ngModel)]="baseline['mimo_'+item]" (change)="onBaselineChange(baseline['mimo_'+item],'mimo_',item)" >
                     <option *ngFor="let mimo of mimoList" value="{{mimo.value}}">{{mimo.name}}</option>
                   </select>
                 </ion-col>
 
-                <ion-col>
-                  <select [(ngModel)]="formElements['qam_'+item]">
+                <ion-col align-self-center>
+                  <select [(ngModel)]="baseline['qam_'+item]" (change)="onBaselineChange(baseline['qam_'+item],'qam_',item)">
                     <option *ngFor="let qam of qamList" value="{{qam.value}}">{{qam.name}}</option>
                   </select>
                 </ion-col>
 
                 <ion-col align-self-center>
-                  <select [(ngModel)]="formElements['nCells_'+item]">
+                  <select [(ngModel)]="baseline['nCells_'+item]" (change)="onBaselineChange(baseline['nCells_'+item],'nCells_',item)">
                     <option *ngFor="let cell of nCellsList" value="{{cell.value}}">{{cell.name}}</option>
                   </select>
                 </ion-col>
@@ -108,17 +110,18 @@
                   <ion-label>Edit</ion-label>
                 </ion-col>
                 <ion-col align-self-center>
-                  <ion-label>175 Mbps</ion-label>
+                  <ion-label>{{baseline['ca_'+item] }}Mbps</ion-label>
                 </ion-col>
               </ion-row>
             </div>
           </div>
           <ion-row>
-            <ion-item>
-              <button ion-button full outline>
+            <!--<ion-item>-->
+              <button class="add-row-btn" ion-button full outline (click)="addRow('Baseline')" >
                 <ion-icon name="add"></ion-icon>Add New Carrier</button>
-            </ion-item>
+            <!--</ion-item>-->
           </ion-row>
+          </div>
         </ion-grid>
 
       </ion-col>
@@ -129,20 +132,37 @@
     </ion-row>
     <ion-row>
       <ion-col col-9>
-        <ion-grid class="border">
-          <ion-row>
-            <ion-item>
-              <ion-label>Evolution</ion-label>
-              <ion-label style="text-align:right">Total</ion-label>
-            </ion-item>
-            <ion-item>
-              <ion-label>Technology Add</ion-label>
-              <ion-select [(ngModel)]="config">
-                <ion-option *ngFor="let key of customerList" value="{{key}}">{{key}}</ion-option>
-              </ion-select>
-            </ion-item>
+        <ion-grid >
+          <ion-row class="e-heading">
+            <ion-col>
+              <ion-label>Evolution
+                <span class="float-right">Total: {{ techCb }}</span>
+              </ion-label>
+            </ion-col>           
           </ion-row>
-          <ion-row>
+         
+          <ion-row class="e-border-right e-border-left">
+            <ion-col>
+               <div>Technology Add</div> 
+               <div class="e-checkbox"> 
+              <span *ngFor="let techn of technologyList">              
+                <ion-checkbox [(ngModel)]="techn.checked" (click)="selectedTechnology(techn)"></ion-checkbox> <span class="radio">{{techn.name}}</span>
+              </span>
+              </div>
+            </ion-col>
+          </ion-row>
+           <div class="e-body">
+          <div *ngFor="let t of selectedTechnologies">
+          <ion-row class="e-border-bottom">
+             <ion-label>{{t.name}}</ion-label>
+             <ion-icon class="float-right" name="md-arrow-dropdown"></ion-icon>
+             
+          </ion-row>
+          <ion-row class="e-border-bottom">
+            <ion-label>Total Number of Carriers {{t.carrier}}</ion-label>
+            </ion-row>
+          
+          <ion-row class="header">
             <ion-col>
               <ion-label>No Of Carrier/Site</ion-label>
             </ion-col>
@@ -165,6 +185,51 @@
               <ion-label>Capacity</ion-label>
             </ion-col>
           </ion-row>
+          <div *ngFor="let item of t.carrierList">
+              <ion-row class="e-row">
+                <ion-col align-self-center>
+                  <ion-label>{{item}}</ion-label>
+                </ion-col>
+                <ion-col align-self-center>
+                  <select [(ngModel)]="technology['chCapacity_'+item+'_'+t.shortname]" (change)="onEvoluationChange(technology['chCapacity_'+item+'_'+t.shortname],'chCapacity_',item,t.shortname)">
+                    <option *ngFor="let channel of channelCapacityList" value="{{channel.value}}">{{channel.name}}</option>
+                  </select>
+                </ion-col>
+
+                <ion-col align-self-center>
+                  <select [(ngModel)]="technology['mimo_'+item+'_'+t.shortname]" (change)="onEvoluationChange(technology['mimo_'+item+'_'+t.shortname],'mimo_',item,t.shortname)" >
+                    <option *ngFor="let mimo of mimoList" value="{{mimo.value}}">{{mimo.name}}</option>
+                  </select>
+                </ion-col>
+
+                <ion-col align-self-center>
+                  <select [(ngModel)]="technology['qam_'+item+'_'+t.shortname]" (change)="onEvoluationChange(technology['qam_'+item+'_'+t.shortname],'qam_',item,t.shortname)">
+                    <option *ngFor="let qam of qamList" value="{{qam.value}}">{{qam.name}}</option>
+                  </select>
+                </ion-col>
+
+                <ion-col align-self-center>
+                  <select [(ngModel)]="technology['nCells_'+item+'_'+t.shortname]" (change)="onEvoluationChange(technology['nCells_'+item+'_'+t.shortname],'nCells_',item,t.shortname)">
+                    <option *ngFor="let cell of nCellsList" value="{{cell.value}}">{{cell.name}}</option>
+                  </select>
+                </ion-col>
+                
+                <ion-col align-self-center>
+                  <ion-label>Edit</ion-label>
+                </ion-col>
+                <ion-col align-self-center>
+                  <ion-label>{{technology['ca_'+item+'_'+t.shortname] }}Mbps</ion-label>
+                </ion-col>
+              </ion-row>
+            </div>
+          <ion-row class="e-border-bottom">
+            <!--<ion-item>-->
+              <button  class="add-row-btn" ion-button full outline (click)="addRow('Evolution',t.name)" >
+                <ion-icon name="add"></ion-icon>Add New Carrier</button>
+            <!--</ion-item>-->
+          </ion-row>
+          </div>
+          </div>
         </ion-grid>
 
 

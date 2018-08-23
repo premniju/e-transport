@@ -1,6 +1,7 @@
 export const AppVariables = {
   EAUTH_URL: "http://192.168.34.237:3500/auth",
   APP_TOKEN: "V4Z0miz5nybWlzAzSQ",
+  CARRIER_LIMIT: 6,
   NCARRIERS: [1, 2, 3, 4, 5, 6],
   NCELLS: [{ value: 1, name: 1 }, { value: 2, name: 2 }, { value: 3, name: 3 }],
   QAM: [{ value: 64, name: '64 QAM' }, { value: 256, name: '256 QAM' }],
@@ -106,7 +107,7 @@ export const AppVariables = {
 export const AppVariables_Tech = {
   TECHNOLOGY_LIST: [
     {
-      name: "Manual", shortname: "manual", fields: [{
+      name: "Manual", shortname: "manual",checked: false,carrier:0, fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: '1',
@@ -128,7 +129,7 @@ export const AppVariables_Tech = {
       }
       ]    
     }, {
-      name: "LAA", shortname: "laa", fields: [{
+      name: "LAA", shortname: "laa",checked: false,carrier:0, fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: '1',
@@ -152,7 +153,7 @@ export const AppVariables_Tech = {
       ]
     },
     {
-      name: "5G Small cell", shortname: "smallCell", fields: [{
+      name: "5G Small cell", shortname: "smallCell",checked: false,carrier:0, fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: 1,
@@ -176,7 +177,7 @@ export const AppVariables_Tech = {
       ]
     },
     {
-      name: "Massive MIMO", shortname: "massiveMimo", fields: [{
+      name: "Massive MIMO", shortname: "massiveMimo",checked: false,carrier:0, fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: 1,
@@ -194,7 +195,7 @@ export const AppVariables_Tech = {
       }]
     },
     {
-      name: "FWA", shortname: "fwa", fields: [{
+      name: "FWA", shortname: "fwa", checked: false,carrier:0,fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: 1,
@@ -224,7 +225,7 @@ export const AppVariables_Tech = {
       ]
     },
     {
-      name: "eMBB", shortname: "embb", fields: [{
+      name: "eMBB", shortname: "embb",checked: false,carrier:0, fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: 1,

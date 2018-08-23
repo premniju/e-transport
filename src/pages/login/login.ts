@@ -41,12 +41,12 @@ export class LoginPage {
         this.responseData = result;
           if (this.responseData.success) {
             localStorage.setItem('userData', JSON.stringify(this.responseData.user));
-             
-            //  if(this.plt.is('core')){
-            //    this.navCtrl.push(DashboardPage);
-            //  }else{
+             console.log(this.plt.is('core'))
+             if(this.plt.is('core')){
+               this.navCtrl.push(DashboardPage);
+             }else{
                 this.navCtrl.push(HomePage);
-            //  }
+             }
             
           } else {
              this.showError(this.responseData.message);
