@@ -236,4 +236,16 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <div>
+      <ion-item>
+        <ion-label id="profile_image" color="primary" stacked>Select File</ion-label>
+        <ion-input type="file" (change)="upload_file($event)"></ion-input>
+        <ion-icon name="camera"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <button ion-button full outline (click)="download_file()">
+          <ion-icon name="download"></ion-icon>Download</button>
+      </ion-item>
+  
+    </div>
 </ion-content>

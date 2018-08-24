@@ -4,7 +4,7 @@ import { LoginPage } from '../login/login';
 import { HomePage } from '../home/home';
 import { AppVariables,AppVariables_Tech } from "../../config/app-variables";
 import { EDimmensionProvider } from "../../providers/e-dimmension/e-dimmension";
-
+import * as  Papa from 'papaparse';
 /**
  * Generated class for the DashboardPage page.
  *
@@ -37,6 +37,12 @@ export class DashboardPage {
   public technologyList:any=AppVariables_Tech.TECHNOLOGY_LIST;
   public selectedTechnologies:any=[];
   public techCb:Number;
+  
+    public inputData: any[] = [];
+  public headerRow: any[] = [];
+
+  public baselineValue: number = 1000;
+  public TTPeakValue: number = 2000;
   
   
   
@@ -257,6 +263,61 @@ export class DashboardPage {
     console.log(this.technology)
     this.getCbValue();
 
+  }
+    upload_file(event: any) {
+    Papa.parse(event.target.files[0], {
+      header: true,
+      dynamicTyping: true,
+      complete: function (results) {
+        this.inputData = results.data;
+
+        console.log("input data", this.inputData);
+        localStorage.setItem("Input_Data", JSON.stringify(this.inputData));
+      }
+    });
+  }
+
+  download_file() {
+    let objArray: any = [];
+    let outputArray: any = [];
+    //console.log("Download data", JSON.parse(localStorage.getItem("Input_Data")));
+
+    objArray = JSON.parse(localStorage.getItem("Input_Data"));
+    console.log("objArray", objArray);
+    var result = objArray.map(obj => {
+      if (obj["S. No"] === null) {
+        return;
+      }
+
+      let c = obj["Configured CIR (in Mbps)"];
+      let d = obj["Current Bandwidth Utilization (in Mbps)"];
+
+      let e = Math.round((d / c) * 100);
+      obj["Current Bandwidth Utilization (%)"] = e + "%";
+
+      let f = obj["Baseline Theoritical Peak (Mbps)"] = this.baselineValue;
+
+      let g = Math.round((d / f) * 100);
+      obj["Utilization (%) based on theoritical peak"] = g + "%";
+
+      let i = this.TTPeakValue;
+      let h = obj["Evolution Theoritical Peak Througput (in Mbps)"] = i - f;
+      obj["Total Theoritical Peak Throuput Required (Mbps)"] = this.TTPeakValue;
+      let j = obj["Capacity Required (in Mbps)"] = i * g;
+
+      outputArray.push(obj);
+    });
+
+    let output_csv = Papa.unparse(outputArray, { header: true });
+    //console.log("JSON-CSV", output_csv);
+
+    let blob = new Blob([output_csv]);
+    let a = window.document.createElement("a");
+    a.href = window.URL.createObjectURL(blob);
+    a.download = "newdata.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
   
 }
