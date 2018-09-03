@@ -8,6 +8,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { ChartPage } from '../pages/chart/chart';
+import { AdvanceEditPage } from '../pages/advance-edit/advance-edit';
 import {DashboardPage} from '../pages/dashboard/dashboard';
 import { EAuthProvider } from '../providers/e-auth/e-auth';
 import { HttpClientModule } from '@angular/common/http';
@@ -23,23 +24,27 @@ import { EPdfProvider } from '../providers/e-pdf/e-pdf';
   declarations: [
     MyApp,
     HomePage,
-    LoginPage,
+    // LoginPage,
     ChartPage,
-    DashboardPage
+    //  DashboardPage,
+    AdvanceEditPage
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp,{
+      preloadModules: true
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage,
+    // LoginPage,
     HomePage,
     ChartPage,
-    DashboardPage
+    // DashboardPage,
+    AdvanceEditPage
   ],
   providers: [
     StatusBar,

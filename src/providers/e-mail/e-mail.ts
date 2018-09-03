@@ -24,36 +24,39 @@ export class EMailProvider {
     body: string): void {
     //console.log(attachment)
 
-let base64parts = attachment.split(',');
-base64parts[0] = 'base64:report.png//';
-let compatableAttachment =  base64parts.join("");
-console.log(compatableAttachment)
-body = "<p>Hello world</p>";
-console.log(body)
+// let base64parts = attachment.split(',');
+// base64parts[0] = 'base64:report.png//';
+// attachment =  base64parts.join("");
+// console.log(compatableAttachment)
+// body = "<p>Hello world</p>";
+// console.log(body)
     this.emailComposer.isAvailable().then((available: boolean) => {
 
 
       this.emailComposer.hasPermission()
         .then((isPermitted: boolean) => {
           let email = {
-            app 			: 'mailto',
+            // app 			: 'mailto',
             to: to,
             cc: cc,
             bcc: bcc,
             attachments: [
-              compatableAttachment
+              "file:///F:/xampp/htdocs/e-transport/download/eReport.pdf"
             ],
             subject: subject,
             body: body,//'<img src="'+attachment+'"></img></body>',
             isHtml: true
 
           };
-
+console.log("ssds")
           // Send a text message using default options
           this.emailComposer.open(email).then(null, function () {
             console.log("sd")
    // user cancelled email
- });
+ }).catch((error: any) => {
+          console.log('attachment open');
+          console.dir(error);
+        });
         }).catch((error: any) => {
           console.log('No access permission granted');
           console.dir(error);

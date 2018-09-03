@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';

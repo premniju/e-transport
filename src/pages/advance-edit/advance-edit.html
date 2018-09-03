@@ -1,0 +1,32 @@
+<ion-header>
+
+  <ion-navbar >
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">Close</button>
+    </ion-buttons>
+    <ion-title>Advance Edit</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div [hidden]="!data">
+     <ion-item>
+        <ion-label>Spectrum Efficiency</ion-label>
+        <ion-input required [(ngModel)]="data.mimo" type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>TN Overhead</ion-label>
+        <ion-input min="0" max="4" required [(ngModel)]="data.tn" type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Cell Peak Rate</ion-label>
+        <ion-input required [(ngModel)]="data.cpr" type="number"></ion-input>
+      </ion-item>
+
+  </div>
+  
+  <button ion-button color="primary" full (click)="save()">Save</button>
+
+</ion-content>

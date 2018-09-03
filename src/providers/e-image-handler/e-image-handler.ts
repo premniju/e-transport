@@ -10,6 +10,8 @@ import { EMailProvider } from '../e-mail/e-mail';
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import * as html2canvas from 'html2canvas';
+import { AppVariables } from "../../config/app-variables";
 
 /*
   Generated class for the EImageHandlerProvider provider.
@@ -17,6 +19,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
+declare let cordova: any;
 @Injectable()
 export class EImageHandlerProvider {
 
@@ -83,42 +86,10 @@ table(data, columns) {
         }
     };
 }
-  downloadPdf(b64Data) {
+  downloadPdf(charts:any) {
   
-      
-      //TODO:: Download Image
-
-            //   let contentType = '';
-            //   let sliceSize = 512;
-
-            // b64Data = b64Data.replace(/data\:image\/(jpeg|jpg|png)\;base64\,/gi, '');
-
-            //   let byteCharacters = atob(b64Data);
-            //   let byteArrays = [];
-
-            //   for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            //     let slice = byteCharacters.slice(offset, offset + sliceSize);
-          
-            //     let byteNumbers = new Array(slice.length);
-            //     for (let i = 0; i < slice.length; i++) {
-            //         byteNumbers[i] = slice.charCodeAt(i);
-            //     }
-          
-            //     let byteArray = new Uint8Array(byteNumbers);
-            //     byteArrays.push(byteArray);
-            //   }
-
-            //   let blob = new Blob(byteArrays, {type: contentType});
-
-            //   let urlCreator = window.URL
-            //   const a = document.createElement('a');
-            //   let url = urlCreator.createObjectURL(blob);
-            //   console.log(url)
-           
-              // a.href = urlCreator.createObjectURL(blob);
-              // a.download = "report.png";
-              // document.body.appendChild(a);
-              // a.click();
+     
+     
 
    
  this.docDefinition = {
@@ -129,11 +100,17 @@ table(data, columns) {
       //   },
       content: [
         { text: 'TRANSPORT DIMENSION TOOL', style: 'header' },      
-
-        { image: b64Data,
-      alignment: 'center',
-      fit: [400, 400] }, 
-      this.table(this.externalDataRetrievedFromServer, ['name', 'age'])
+        // charts,
+      //   { image: pieChart,
+      // alignment: 'center',
+      // fit: [400, 400] }, 
+      // { image: stackedChart,
+      // alignment: 'center',
+      // fit: [400, 400] }, 
+      // { image: barChart,
+      // alignment: 'center',
+      // fit: [400, 400] }, 
+      // this.table(this.externalDataRetrievedFromServer, ['name', 'age'])
       
 
        
@@ -158,29 +135,27 @@ table(data, columns) {
         },
         image:{
           alignment: 'center',
-          width: '400px',           
-          margin: [0, 20, 0, 20]
+          fit: [400, 400],
+          // width: '400px',           
+          margin: [10, 10, 10, 10],
+          // padding:[20,20,20,20]
+        },
+        squareImage:{
+          alignment: 'center',
+          //fit: [300, 300],
+           width: '300px',           
+          margin: [10, 10, 10, 10],
+          // padding:[20,20,20,20]
         }
       }
     }
-
-
+charts.forEach((item, index) => {
+//console.log(this.docDefinition.content.)
+this.docDefinition.content.push(item);
+});
  
       this.pdfObj = pdfMake.createPdf(this.docDefinition);
-//       this.pdfObj.getDataUrl((dataUrl) => {
 
-
-//        // Share via email
-// this.socialSharing.shareViaEmail('Body', 'Subject', [dataUrl]).then(() => {
-//   // Success!
-// }).catch((err) => {
-//   // Error!
-//   console.log(err)
-// });
-//          //   this._email.sendMail("nijanthan.p@lnttechservices.com", "nijanthan.p@lnttechservices.com", "nijanthan.p@lnttechservices.com",dataUrl, "Hii", "Hello Niju");
-//             console.log(dataUrl)
-            
-//       });
         if (this.plt.is('cordova')) {
               this.pdfObj.getBuffer((buffer) => {
                 var blob = new Blob([buffer], { type: 'application/pdf' });        
@@ -189,7 +164,10 @@ table(data, columns) {
                  
                   // Open the PDf with the correct OS tools
                  this.fileOpener.open(this.file.dataDirectory + 'eReport.pdf', 'application/pdf');
-                })
+                }).catch(err => {
+                console.log('Directory doesn\'t exist');
+                console.log(err);
+              });
               });
         } else {
           // On a browser simply use download!
@@ -199,6 +177,46 @@ table(data, columns) {
            
       
     }
+
+  generatePDF() {
+    const div = document.getElementById("exportthis");
+    const options = { background: "white", height: div.clientHeight, width: div.clientWidth };
+    html2canvas(div, options).then((canvas) => {
+      var data = canvas.toDataURL();
+      var docDefinition = {
+        content: [{
+          image: data,
+          width: 300,
+        }]
+      };
+      let attach = pdfMake.createPdf(docDefinition).download("Score_Details.pdf");;
+      // attach.getBuffer((buffer) => {
+      //   var blob = new Blob([buffer], { type: 'application/pdf' });
+      //   console.log(cordova.file.dataDirectory);
+
+      //   let filePath:any = "F:\\xampp\\htdocs\\e-transport\\download\\";
+        // Save the PDF to the data Directory of our App
+//         this.file.writeFile(filePath, 'eReport.pdf', blob, { replace: true }).then(fileEntry => {
+//  console.log("File created");
+//           // Open the PDf with the correct OS tools
+//           this.fileOpener.open(filePath + 'eReport.pdf', 'application/pdf');
+//         }).catch(err => {
+//                 console.log('Directory doesn\'t exist');
+//                 console.log(err);
+//               });
+       // let attach = "F:\\xampp\\htdocs\\e-transport\\download\\eReport.pdf";
+        // let attachments = attach.split(':');
+
+        // attachments[0] ='';
+        // let attachment =  attachments.join("");
+        // console.log(attachment);
+
+      //   this._email.sendMail(AppVariables.EXECUTIVE_EMAIL, AppVariables.EXECUTIVE_EMAIL, AppVariables.EXECUTIVE_EMAIL, attach, AppVariables.EMAIL_SUBJECT, null);
+      // });
+
+      //   .download("Score_Details.pdf");
+   });
+  }
 
 
     

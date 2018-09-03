@@ -73,18 +73,18 @@ export class HomePage {
 
 
     // color code for the charts
-    this.colors['Carrier 1'] = '#FFC939';
-    this.colors['Carrier 2'] = '#F6702E';
-    this.colors['Carrier 3'] = '#F26762';
-    this.colors['Carrier 4'] = '#760C16';
-    this.colors['Carrier 5'] = '#EF3529';
-    this.colors['Carrier 6'] = '#CCCCFF';
-    this.colors['LAA'] = '#0072A8';
-    this.colors['5G Small cell'] = '#438F9D';
-    this.colors['Massive MIMO'] = '#E91E63';
-    this.colors['FWA'] = '#01673F';
-    this.colors['eMBB'] = '#7030A2';
-    this.colors['Manual'] = '#28A745';
+    this.colors['Carrier 1'] = '#0099ff';
+    this.colors['Carrier 2'] = '#66ff99';
+    this.colors['Carrier 3'] = '#ff6666';
+    this.colors['Carrier 4'] = '#00ffdd';
+    this.colors['Carrier 5'] = '#ff99ff';
+    this.colors['Carrier 6'] = '#ffff66';
+    this.colors['LAA'] = '#66ffff';
+    this.colors['5G Small cell'] = '#ff9999';
+    this.colors['Massive MIMO'] = '#ffcc99';
+    this.colors['FWA'] = '#cc99ff';
+    this.colors['eMBB'] = '#cc9999';
+    this.colors['Manual'] = '#33ffcc';
 
     if (this.plt.is('core')) {
       this.isApp = false;

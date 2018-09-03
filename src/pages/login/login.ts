@@ -11,7 +11,10 @@ import {DashboardPage} from '../dashboard/dashboard';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+@IonicPage({
+  name: 'login',
+  segment: ''
+})
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -43,7 +46,7 @@ export class LoginPage {
             localStorage.setItem('userData', JSON.stringify(this.responseData.user));
              console.log(this.plt.is('core'))
              if(this.plt.is('core')){
-               this.navCtrl.push(DashboardPage);
+               this.navCtrl.push('my-dashboard');
              }else{
                 this.navCtrl.push(HomePage);
              }

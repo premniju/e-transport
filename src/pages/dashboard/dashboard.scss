@@ -1,6 +1,6 @@
 page-dashboard {
     .border{
-        border: 1px solid red;
+        border: 1px solid #dedede;
     }
     .item-select .label-md{
     color: #000000;
@@ -8,8 +8,9 @@ page-dashboard {
     .header{
         border-top:1px solid #dedede;
          border-bottom:2px solid #dedede;
-         color:#173253;
+         color:rgb(45, 80, 122);
          font-weight: bold;
+         
 
     }
     .mail-icon {
@@ -19,9 +20,10 @@ page-dashboard {
     font-weight: bold;
 }
 .radio{
-    // padding-right: 10px;
+    
     padding-left: 5px;
-    vertical-align:middle;
+    vertical-align:top;
+     color: rgb(150, 150, 150);
 }
 .e-row{
     border-bottom: 1px solid #dedede;
@@ -31,9 +33,10 @@ page-dashboard {
     margin: -14px 0 10px
 }
 .e-heading{
-    background-color: #F8F8F8;
+    background-color:rgb(247, 247, 247);
     border: 1px solid #dedede;
-    color:#173253;
+    color:rgb(45, 80, 122);
+    
     // font-weight: bold;
     font-size: 2.0rem;
 }
@@ -57,4 +60,91 @@ page-dashboard {
     /* vertical-align: middle; */
     margin-right: 15px;
 }
+.m-left-5{
+    margin-left: 5px;
 }
+.m-right-5{
+    margin-right: 5px;
+}
+.no-border div.item-inner{
+    border-bottom: 0 !important;
+}
+.e-dimensional-value{
+    color: rgb(226, 166, 26);
+}
+.font-1-8{
+color:rgb(45, 80, 122);
+font-size:1.8rem;
+}
+.no-carrier{
+   color: rgb(150, 150, 150);
+}
+.toolbar-md-primary .toolbar-background-md{
+    background: linear-gradient(to right,rgb(13, 32, 54) ,rgb(66, 129, 206));
+}
+
+.odd{
+background-color: rgb(255, 255, 255);
+}
+.even{
+    background-color: rgb(235,244,255);
+}
+.e-box-shadow{
+    box-shadow: 0 5px 5px -5px #333;
+}
+.modal-wrapper{
+        width:300px;
+        height:50%;
+    }
+
+.chart-wrapper {
+    width: 95%;
+    display: inline-block;
+    // margin: auto;
+    // margin: 0em 0.5em;
+}
+   .list-md{
+    margin: 1px 20px 16px;
+}
+canvas  {
+      height: 300px;
+   }
+   .no-padding{
+       padding:0 !important;
+   }
+   .clear{
+       clear:both;
+   }
+   .font-2-5{
+       font-size: 2.5rem;
+       font-weight: bold;
+       color:rgb(45, 80, 122);
+   }
+   .file-upload{
+        color:rgb(45, 80, 122);
+        font-weight: 500;
+   }
+   .download-pdf {
+	float: right;
+	margin-right: 20px;
+    font-size: 2.0em;
+    
+}
+
+.c-list{
+    
+    font-size: 1.2rem;
+    display: inline-block;
+    text-align: center;
+    margin-right: 10px;
+    margin-left: 5px;
+    padding:5px 0px 5px;
+    width:20%;
+}
+
+.c-label{
+    background-color: #fff;
+    border-radius: 3px;
+}
+}
+

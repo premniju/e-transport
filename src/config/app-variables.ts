@@ -9,6 +9,7 @@ export const AppVariables = {
   MIMO: [{ value: 1.73, name: '2x2 MIMO' }, { value: 2.25, name: '4x2 MIMO' }, { value: 3.15, name: '4x4 MIMO' }, { value: 5.57, name: '32 MIMO' }, { value: 10.4, name: '64 MIMO' }],
   CPR: [{ value: 1121, name: 'laa' }, { value: 900, name: 'smallCell' }, { value: 150, name: 'massiveMimo' }, { value: 50, name: 'fwa' }, { value: 900, name: 'embb' }, { value: 150, name: 'default' }, { value: 150, name: 'manual' }],
   OPERATOR: ['Manual', 'Option A', 'Option B', 'Option C'],
+  TRANSPORTTHRESHOLD:1.17,
   OPERATOR_A: [{
       carrier: 1,
       nCells: 3,
@@ -107,7 +108,7 @@ export const AppVariables = {
 export const AppVariables_Tech = {
   TECHNOLOGY_LIST: [
     {
-      name: "Manual", shortname: "manual",checked: false,carrier:0, fields: [{
+      name: "Manual", shortname: "manual",checked: false,carrier:0,icon:'md-arrow-dropup', fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: '1',
@@ -129,7 +130,7 @@ export const AppVariables_Tech = {
       }
       ]    
     }, {
-      name: "LAA", shortname: "laa",checked: false,carrier:0, fields: [{
+      name: "LAA", shortname: "laa",checked: false,carrier:0,icon:'md-arrow-dropup', fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: '1',
@@ -153,7 +154,7 @@ export const AppVariables_Tech = {
       ]
     },
     {
-      name: "5G Small cell", shortname: "smallCell",checked: false,carrier:0, fields: [{
+      name: "5G Small cell", shortname: "smallCell",checked: false,carrier:0,icon:'md-arrow-dropup', fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: 1,
@@ -177,7 +178,7 @@ export const AppVariables_Tech = {
       ]
     },
     {
-      name: "Massive MIMO", shortname: "massiveMimo",checked: false,carrier:0, fields: [{
+      name: "Massive MIMO", shortname: "massiveMimo",checked: false,carrier:0,icon:'md-arrow-dropup', fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: 1,
@@ -195,7 +196,7 @@ export const AppVariables_Tech = {
       }]
     },
     {
-      name: "FWA", shortname: "fwa", checked: false,carrier:0,fields: [{
+      name: "FWA", shortname: "fwa", checked: false,carrier:0,icon:'md-arrow-dropup',fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: 1,
@@ -225,7 +226,7 @@ export const AppVariables_Tech = {
       ]
     },
     {
-      name: "eMBB", shortname: "embb",checked: false,carrier:0, fields: [{
+      name: "eMBB", shortname: "embb",checked: false,carrier:0,icon:'md-arrow-dropup', fields: [{
         label: "No of Radios",
         name: "nCells_",
         type: 1,

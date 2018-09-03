@@ -110,4 +110,59 @@
     .toolbar-title{
         font-size:1.8rem !important;
     }
+    // $modal-inset-width:500px;
+    .modal-wrapper{
+        
+    position: absolute;
+    overflow: hidden;
+    max-width: 280px;
+    border-radius: 2px;
+    width: 80vw;
+    height: 32vh;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 0;
+    box-shadow: 0 16px 20px rgba(0,0,0,.4);
+    background-color: #fafafa;
+    }
+.c-1{
+    background-color: #0099ff;
+    // border: 1px solid FFC939;
+}
+.c-2{
+    background-color: #66ff99;
+}
+.c-3{
+    background-color: #ff6666;
+}
+.c-4{
+    background-color: #00ffdd;
+}
+.c-5{
+    background-color: #ff99ff;
+}
+.c-6{
+    background-color: #ffff66;
+}
+.c-laa{
+    background-color: #66ffff;
+}
+.c-smallCell{
+    background-color: #ff9999;
+}
+.c-massiveMimo{
+    background-color: #ffcc99;
+}
+.c-fwa{
+    background-color: #cc99ff;
+}
+.c-embb{
+    background-color: #cc9999;
+}
+.c-manual{
+    background-color: #33ffcc;
+}
 }
