@@ -158,6 +158,7 @@ export class DashboardPage {
       if (AppVariables.CARRIER_LIMIT > this.carrier) {
         this.carrier = +this.carrier + 1;
 
+        this.baseline['name_' + this.carrier] = 'Carrier ' + this.carrier;
         this.baseline['thresholdValue_' + this.carrier] = (typeof this.baseline['thresholdValue_' + this.carrier] == 'undefined') ? AppVariables.TRANSPORTTHRESHOLD : this.baseline['thresholdValue_' + this.carrier];
         this.baseline['cprValue_' + this.carrier] = (typeof this.baseline['cprValue_' + this.carrier] == 'undefined') ? AppVariables.CPR.filter(item => item.name === 'manual')[0].value : this.baseline['cprValue_' + this.carrier];
         this.baseline['mimoValue_' + this.carrier] = (typeof this.baseline['mimoValue_' + this.carrier] == 'undefined') ? null : this.baseline['mimoValue_' + this.carrier];
@@ -191,6 +192,7 @@ export class DashboardPage {
           return el.name == technology;
         })[0].carrierList = this.carrierlist.slice(0, carrier);
 
+        this.technology['name_' + carrier + '_' + shortname] = tech[0].name + ' ' + carrier;
         this.technology['thresholdValue_' + carrier + '_' + shortname] = (typeof this.technology['thresholdValue_' + carrier + '_' + shortname] == 'undefined') ? AppVariables.TRANSPORTTHRESHOLD : this.technology['thresholdValue_' + carrier + '_' + shortname];
         this.technology['cprValue_' + carrier + '_' + shortname] = (typeof this.technology['cprValue_' + carrier + '_' + shortname] == 'undefined') ? AppVariables.CPR.filter(item => item.name === shortname)[0].value : this.technology['cprValue_' + carrier + '_' + shortname];
         this.technology['mimoValue_' + carrier + '_' + shortname] = (typeof this.technology['mimoValue_' + carrier + '_' + shortname] == 'undefined') ? null : this.technology['mimoValue_' + carrier + '_' + shortname];
@@ -266,11 +268,6 @@ export class DashboardPage {
    * All Baseline form value change event.
    */
   onBaselineChange(selectedValue: any, field: any, item: any, value?: any) {
-
-    console.log("selectedValue", selectedValue);
-    console.log("field", field);
-    console.log("item", item);
-    console.log("value", value);
 
     if (field == "name_") {
       this.baseline[field + item] = value;
