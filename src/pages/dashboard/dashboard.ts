@@ -50,6 +50,7 @@ export class DashboardPage {
   public technologyList: any = AppVariables_Tech.TECHNOLOGY_LIST;
   public selectedTechnologies: any = [];
   public techCb: number;
+  public img: string;
 
   public inputData: any[] = [];
   public headerRow: any[] = [];
@@ -575,6 +576,8 @@ export class DashboardPage {
         // }
       }
     });
+
+    if(data.length>0)
     this.formData.push(data);
 
   }
@@ -642,7 +645,7 @@ let curObj = this;
 
     if (this.pieChartEl !== undefined)
       this.pieChartEl.destroy();
-    this.pieChartEl = new Chart(this.pieChart.nativeElement,
+     this.pieChartEl = new Chart(this.pieChart.nativeElement,
       {    
         plugins: [{
         beforeDraw: function(chart, options) {   
@@ -801,47 +804,107 @@ createStackedChart()
    });
 }
 downloadPdf(){
-  let pieChart = this.pieChartEl.toBase64Image();
-  let stackedChart = this.barStackedChartEl.toBase64Image();
- // let barChart = this.barChartEl.toBase64Image();
-
-
    
    let charts =[];
-  //  charts.push(charts.push({image:pieChart,fit: [400, 400], alignment: 'center'}));
-  //  charts.push(charts.push({image:stackedChart,fit: [400, 200], alignment: 'center'}));
-
- // var job1 = new Promise((resolve, reject) => { 
-   const exportStackedChart = document.getElementById("exportSquareChart");
    var obj=this;
-   const options = { background: "white", height: exportStackedChart.clientHeight, width: exportStackedChart.clientWidth };
+  if(this.formData.length<=3){
+   let exportStackedChart = document.getElementById("exportStackedChart");
+  
+   let options = { background: "white", height: exportStackedChart.clientHeight, width: exportStackedChart.clientWidth };
     html2canvas(exportStackedChart, options).then((canvas) => {
      
-     charts.push({image:canvas.toDataURL(),alignment: 'center',margin: [5, 5, 5, 5],});
-     let exportPieChart = document.getElementById("exportPieChart");     
-      return html2canvas(exportPieChart, options);    
+     charts.push({image:canvas.toDataURL(),alignment: 'center',margin: [5, 5, 5, 5]});
+     let exportSquareChart = document.getElementById("exportSquareChart");
+      let squareChartOptions = { background: "white", height: exportSquareChart.clientHeight, width: (exportSquareChart.clientWidth-10) };
+     
+      return html2canvas(exportSquareChart, squareChartOptions);    
    }).then(function(canvas){
-     charts.push({image:canvas.toDataURL(),style: 'image'});
-     let exportSquareChart = document.getElementById("exportStackedChart");
-     return html2canvas(exportSquareChart, options);     
+     obj.img = canvas.toDataURL();
+      charts.push({image:canvas.toDataURL(),alignment: 'center',margin: [5, 20, 5, 5],style: 'squareImage'});     
+      obj._epdf.generatePDF(charts);     
+   }) 
+   .catch((err) => {
+      console.log("error canvas", err);
+     
+    });
+  }else if(this.formData.length>3 && this.formData.length<10){
+
+    let exportStackedChart = document.getElementById("exportStackedChart");  
+   let options = { background: "white", height: exportStackedChart.clientHeight, width: exportStackedChart.clientWidth };
+    html2canvas(exportStackedChart, options).then((canvas) => {
+     
+     charts.push({image:canvas.toDataURL(),alignment: 'center',margin: [5, 5, 5, 5]});
+     let exportSquareChart = document.getElementById("exportSquareChart");
+      let squareChartOptions = { background: "white", height: exportSquareChart.clientHeight, width: (exportSquareChart.clientWidth-10) };
+     
+      return html2canvas(exportSquareChart, squareChartOptions);    
+   }).then(function(canvas){
+     
+      charts.push({image:canvas.toDataURL(),alignment: 'center',margin: [5, 20, 5, 5],style: 'squareImage',pageBreak: 'after'});  
+    
+     let exportSquareChart2 = document.getElementById("exportSquareChart2");    
+     let squareChartOptions2 = { background: "white", height: exportSquareChart2.clientHeight, width: (exportSquareChart2.clientWidth-10) }; 
+     return html2canvas(exportSquareChart2, squareChartOptions2);     
    })
    .then(function(canvas){
-     charts.push({image:canvas.toDataURL(),style: 'image'});
-     //return html2canvas(div1, options);
-      obj._epdf.downloadPdf(charts);
+     charts.push({image:canvas.toDataURL(),alignment: 'center',style: 'squareImage'});     
+     obj._epdf.generatePDF(charts);
    })
    .catch((err) => {
       console.log("error canvas", err);
-      // reject(err);
+     
     });
-    // });
 
-//    job1.then(function(data) {
-  
-// });
-// console.log(charts)
+   }else if(this.formData.length>=10){
+
+    let exportStackedChart = document.getElementById("exportStackedChart");  
+    let options = { background: "white", height: exportStackedChart.clientHeight, width: exportStackedChart.clientWidth };
+    html2canvas(exportStackedChart, options).then((canvas) => {
+     
+     charts.push({image:canvas.toDataURL(),alignment: 'center',margin: [5, 5, 5, 5]});
+     let exportSquareChart = document.getElementById("exportSquareChart");
+      let squareChartOptions = { background: "white", height: exportSquareChart.clientHeight, width: (exportSquareChart.clientWidth-10) };
+     
+      return html2canvas(exportSquareChart, squareChartOptions);    
+   }).then(function(canvas){
+     
+      charts.push({image:canvas.toDataURL(),alignment: 'center',margin: [5, 20, 5, 5],style: 'squareImage',pageBreak: 'after'});  
+    
+     let exportSquareChart2 = document.getElementById("exportSquareChart2");    
+     let squareChartOptions2 = { background: "white", height: exportSquareChart2.clientHeight, width: (exportSquareChart2.clientWidth-10) }; 
+     return html2canvas(exportSquareChart2, squareChartOptions2);     
+   }).then(function(canvas){
+     
+      charts.push({image:canvas.toDataURL(),alignment: 'center',margin: [5, 20, 5, 5],style: 'squareImage',pageBreak: 'after'});  
+    
+     let exportSquareChart3 = document.getElementById("exportSquareChart3");    
+     let squareChartOptions3 = { background: "white", height: exportSquareChart3.clientHeight, width: (exportSquareChart3.clientWidth-10) }; 
+     return html2canvas(exportSquareChart3, squareChartOptions3);     
+   })
+     .then(function(canvas){
+     charts.push({image:canvas.toDataURL(),alignment: 'center',style: 'squareImage'});     
+     obj._epdf.generatePDF(charts);
+   })
+   .catch((err) => {
+      console.log("error canvas", err);
+     
+    });
+
+
+   }
  
-  // 
+
+
+}
+
+checkPdfPagination(i:any,type:any){
+  if(type == 2 & i>=3 && i<=8){      
+        return true;     
+  }else if(type == 3 && i>=9){    
+        return true;      
+  }else{ 
+  return false;
+  }
 }
 
 
