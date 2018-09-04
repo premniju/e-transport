@@ -162,52 +162,52 @@ export class ChartPage {
             duration: 5000
           },
           legend: {
-            display: false,
-            // position: 'bottom',
-            // fullWidth: true,
-            // onClick: () => {}, //prevent filter by default
-            // labels: {
-            //       generateLabels: (chart) => {
+            display: true,
+            position: 'bottom',
+            fullWidth: true,
+            onClick: () => {}, //prevent filter by default
+            labels: {
+                  generateLabels: (chart) => {
 
-            //         chart.legend.afterFit = function () {
-            //          // var width = this.width; 
+                    chart.legend.afterFit = function () {
+                     // var width = this.width; 
 
 
-            //           this.lineWidths = this.lineWidths.map( () => this.width-12 );
+                      this.lineWidths = this.lineWidths.map( () => this.width-12 );
 
-            //            this.options.labels.padding = 5;
-            //           this.options.labels.boxWidth = 10;
-            //         };
+                       this.options.labels.padding = 5;
+                      this.options.labels.boxWidth = 10;
+                    };
 
-            //         var data = chart.data;
+                    var data = chart.data;
 
-            //         if (data.labels.length && data.datasets.length) {
-            //           return data.labels.map((label, i) => {
-            //             var meta = chart.getDatasetMeta(0);
-            //             var ds = data.datasets[0];
-            //             var arc = meta.data[i];
-            //             var custom = arc && arc.custom || {};
-            //             var getValueAtIndexOrDefault = this.getValueAtIndexOrDefault;
-            //             var arcOpts = chart.options.elements.arc;
-            //             var fill = custom.backgroundColor ? custom.backgroundColor : getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
-            //             var stroke = custom.borderColor ? custom.borderColor : getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
-            //             var bw = custom.borderWidth ? custom.borderWidth : getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
-            //             console.log(label)
-            //             return {
-            //               text: label,
-            //               fillStyle: fill,
-            //               strokeStyle: stroke,
-            //               lineWidth: bw,
-            //             //  hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                    if (data.labels.length && data.datasets.length) {
+                      return data.labels.map((label, i) => {
+                        var meta = chart.getDatasetMeta(0);
+                        var ds = data.datasets[0];
+                        var arc = meta.data[i];
+                        var custom = arc && arc.custom || {};
+                        var getValueAtIndexOrDefault = this.getValueAtIndexOrDefault;
+                        var arcOpts = chart.options.elements.arc;
+                        var fill = custom.backgroundColor ? custom.backgroundColor : getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
+                        var stroke = custom.borderColor ? custom.borderColor : getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
+                        var bw = custom.borderWidth ? custom.borderWidth : getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
+                        console.log(label)
+                        return {
+                          text: label,
+                          fillStyle: fill,
+                          strokeStyle: stroke,
+                          lineWidth: bw,
+                        //  hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
 
-            //               // Extra data used for toggling the correct item
-            //               index: i
-            //             };
-            //           });
-            //         }
-            //         return [];
-            //       }
-            // }
+                          // Extra data used for toggling the correct item
+                          index: i
+                        };
+                      });
+                    }
+                    return [];
+                  }
+            }
           }
         }
       });
