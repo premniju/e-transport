@@ -44,8 +44,7 @@ export class EImageHandlerProvider {
     this.docDefinition = {
 
       content: [
-        { text: 'TRANSPORT DIMENSION TOOL', style: 'header' },
-        charts,
+        { text: 'TRANSPORT DIMENSION TOOL', style: 'header' },        
         {
           image: charts,
           alignment: 'center',
@@ -103,21 +102,14 @@ export class EImageHandlerProvider {
 
   }
 
-  generatePDF(charts:any) {
-   
+  generatePDF(charts:any) { 
 
 
 
     this.docDefinition = {
 
       content: [
-        { text: 'TRANSPORT DIMENSION TOOL', style: 'header' },
-        charts,
-        {
-          image: charts,
-          alignment: 'center',
-          fit: [400, 400]
-        }
+        { text: 'TRANSPORT DIMENSION TOOL', style: 'header' }        
       ],
       unbreakable: true,
       styles: {

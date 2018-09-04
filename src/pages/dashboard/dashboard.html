@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar hideBackButton color="primary"  >
+  <ion-navbar hideBackButton color="primary">
     <ion-title>
       <img src="assets/imgs/logo.png" style="height: 20px;
     width: 20px;
@@ -26,7 +26,7 @@
 
 <ion-content padding>
   <ion-grid>
-<ion-row>
+    <ion-row>
    <ion-col col-8>
   <ion-grid>
     <ion-row>
@@ -35,7 +35,9 @@
           <ion-row class="e-heading ">
             <ion-col>
               <ion-label style="white-space:normal">Baseline
-                <div class="float-right">Total <span class="e-dimensional-value">{{ cb }}</span></div>
+                      <div class="float-right">Total
+                        <span class="e-dimensional-value">{{ cb }} Mbps</span>
+                      </div>
               </ion-label>
             </ion-col>
           </ion-row>
@@ -45,10 +47,14 @@
                 <div>
                   <div class="float-left font-1-8">Load Configuration</div>
                   <ion-list class="float-right" radio-group [(ngModel)]="config" (ionChange)="onOperatorChange($event)">
-                    <ion-radio value="A" checked></ion-radio><span class="radio">Option A</span>
-                    <ion-radio value="B"></ion-radio><span class="radio">Option B</span>
-                    <ion-radio value="C"></ion-radio><span class="radio">Option C</span>
-                    <ion-radio value="M"></ion-radio><span class="radio">Manual</span>
+                          <ion-radio value="A" checked></ion-radio>
+                          <span class="radio">Option A</span>
+                          <ion-radio value="B"></ion-radio>
+                          <span class="radio">Option B</span>
+                          <ion-radio value="C"></ion-radio>
+                          <span class="radio">Option C</span>
+                          <ion-radio value="M"></ion-radio>
+                          <span class="radio">Manual</span>
                   </ion-list>
                 </div>
 
@@ -62,7 +68,8 @@
                 <ion-label>No Of Carrier/Site</ion-label>
               </ion-col>
               <ion-col>
-                <ion-label>Ch BW(MHz)<br/>Carrier</ion-label>
+                      <ion-label>Ch BW(MHz)
+                        <br/>Carrier</ion-label>
               </ion-col>
               <ion-col>
                 <ion-label>MIMO</ion-label>
@@ -84,7 +91,9 @@
               <div *ngFor="let item of selectedCarrierList; let i = index;">
                 <ion-row class="e-row center-text" [ngClass]="(i % 2 == 0) ? 'odd' : 'even'">
                   <ion-col align-self-center>
-                    <ion-label>{{item}}</ion-label>
+                          <!-- <ion-label>{{baseline['name_'+item]}}</ion-label> -->
+                          <ion-input type="text" [(ngModel)]="baseline['name_'+item]" (input)="onBaselineChange(baseline['name_'+item],'name_',item,$event.target.value)"></ion-input>
+
                   </ion-col>
                   <ion-col align-self-center>
                     <select [(ngModel)]="baseline['chCapacity_'+item]" (change)="onBaselineChange(baseline['chCapacity_'+item],'chCapacity_',item)">
@@ -122,27 +131,29 @@
               </div>
             </div>
             <ion-row>
-              
+
               <button class="add-row-btn" ion-button full outline (click)="addRow('Baseline')">
                 <ion-icon class="m-right-5" name="add"></ion-icon>Add New Carrier</button>
-              
+
             </ion-row>
           </div>
         </ion-grid>
 
       </ion-col>
-      
+
 
     </ion-row>
     <div class="clear">&nbsp;</div>
     <ion-row>
-      
-      <ion-col col-12  class="no-padding" >
+
+            <ion-col col-12 class="no-padding">
         <ion-grid  class="no-padding">
           <ion-row class="e-heading">
             <ion-col>
               <ion-label style="white-space:normal">Evolution
-                <div class="float-right">Total <span class="e-dimensional-value">{{ techCb }}</span></div>
+                      <div class="float-right">Total
+                        <span class="e-dimensional-value">{{ techCb }} Mbps</span>
+                      </div>
               </ion-label>
             </ion-col>
           </ion-row>
@@ -151,8 +162,9 @@
             <ion-col>
               <div class="font-1-8">Technology Add</div>
               <div class="e-checkbox">
-                <span *ngFor="let techn of technologyList">              
-                <ion-checkbox [(ngModel)]="techn.checked" (click)="selectedTechnology(techn)"></ion-checkbox> <span class="radio">{{techn.name}}</span>
+                      <span *ngFor="let techn of technologyList">
+                        <ion-checkbox [(ngModel)]="techn.checked" (click)="selectedTechnology(techn)"></ion-checkbox>
+                        <span class="radio">{{techn.name}}</span>
                 </span>
               </div>
             </ion-col>
@@ -160,7 +172,8 @@
           <div class="e-body">
             <div *ngFor="let t of selectedTechnologies">
               <ion-row class="e-border-bottom e-box-shadow">
-                <ion-label class="m-left-5 font-1-8">{{t.name}} (<span class="e-dimensional-value">{{ technology['ca_'+t.shortname] }}</span>)</ion-label>                
+                      <ion-label class="m-left-5 font-1-8">{{t.name}} (
+                        <span class="e-dimensional-value">{{ technology['ca_'+t.shortname] }} Mbps</span>)</ion-label>
                 <ion-icon color="primary"  class="float-right arrow" name="{{t.icon}}" (click)="hideShowTechnology(t)"></ion-icon>
               </ion-row>
             <div *ngIf="t.icon == 'md-arrow-dropup'">
@@ -173,7 +186,8 @@
                   <ion-label>No Of Carrier/Site</ion-label>
                 </ion-col>
                 <ion-col>
-                  <ion-label>Ch BW(MHz)<br/>Carrier</ion-label>
+                          <ion-label>Ch BW(MHz)
+                            <br/>Carrier</ion-label>
                 </ion-col>
                 <ion-col>
                   <ion-label>MIMO</ion-label>
@@ -192,9 +206,11 @@
                 </ion-col>
               </ion-row>
               <div *ngFor="let item of t.carrierList; let i = index;">
-                <ion-row class="e-row center-text" [ngClass]="(i % 2 == 0) ? 'odd' : 'even'" >
+                        <ion-row class="e-row center-text" [ngClass]="(i % 2 == 0) ? 'odd' : 'even'">
                   <ion-col align-self-center>
-                    <ion-label>{{item}}</ion-label>
+                            <!--<ion-label>{{item}}</ion-label>-->
+                            <ion-input type="text" [(ngModel)]="technology['name_'+item+'_'+t.shortname]" (input)="onEvoluationChange(technology['name_'+item+'_'+t.shortname],'name_',item,t.shortname,$event.target.value)">{{t.name}}{{t.carrier}}</ion-input>
+                            
                   </ion-col>
                   <ion-col align-self-center>
                     <select [(ngModel)]="technology['chCapacity_'+item+'_'+t.shortname]" (change)="onEvoluationChange(technology['chCapacity_'+item+'_'+t.shortname],'chCapacity_',item,t.shortname)">
@@ -229,10 +245,10 @@
                 </ion-row>
               </div>
               <ion-row class="e-border-bottom">
-                
+
                 <button class="add-row-btn" ion-button full outline (click)="addRow('Evolution',t.name)">
                 <ion-icon class="m-right-5" name="add"></ion-icon>Add New Carrier</button>
-                
+
               </ion-row>
               </div>
             </div>
@@ -244,8 +260,8 @@
     </ion-row>
     <div class="clear">&nbsp;</div>
     <ion-row>
-       
-      <ion-col col-12 class="no-padding" >
+
+            <ion-col col-12 class="no-padding">
         <ion-grid class="no-padding">
           <ion-row class="e-heading">
             <ion-col>
@@ -268,12 +284,14 @@
             <button class="add-row-btn" ion-button full outline (click)="download_file()">
                 <ion-icon class="m-right-5" name="download"></ion-icon>Download</button>
           </ion-row>
-          <img src="{{img}}"/>
+          
 
 
         </ion-grid>
       </ion-col>
     </ion-row>
+    <div *ngIf="isPdf" class="{{ pdfCss }}">
+      
     <ion-row>
       <ion-col col-9 class="no-padding">
         <div class="clear">&nbsp;</div>
@@ -281,9 +299,13 @@
         <div *ngFor="let row of formData; let i = index;" class="no-border no-padding center-text square-box" >
          <div *ngIf="i<3">
           <div *ngFor="let col of row;" class="c-list {{col.class}}">
-            {{col.name}} <br/> No of Sectors - {{col.sectors}}<br/> Channel BW - {{col.channelBw}}MHz <br/> MIMO - {{col.mimo}}
+                            {{col.name}}
+                            <br/> No of Sectors - {{col.sectors}}
+                            <br/> Channel BW - {{col.channelBw}}MHz
+                            <br/> MIMO - {{col.mimo}}
             <br/>
-            <span style="padding-bottom:5px;"> QAM - {{col.qam}}QAM</span> <br/>
+                            <span style="padding-bottom:5px;"> QAM - {{col.qam}}QAM</span>
+                            <br/>
             <span class="c-label"> {{col.ca}}Mbps </span>
             <br/>
           </div>
@@ -331,15 +353,18 @@
       </div>
       </ion-col>
     </ion-row>
+    </div>
   </ion-grid>
   </ion-col>
-  <ion-col col-4 >
+      <ion-col col-4>
     <div id="Html2Pdf">
-      <ion-grid >
+          <ion-grid>
         <div id="exportStackedChart">
         <ion-row>
           <ion-col class="border">
-            <ion-label class="m-left-5 font-2-5" style="padding-bottom:40px">CSR Capacity <span class="e-dimensional-value float-right">{{ TTPeakValue }}</span></ion-label>
+                  <ion-label class="m-left-5 font-2-5" style="padding-bottom:40px">CSR Capacity
+                    <span class="e-dimensional-value float-right">{{ TTPeakValue }} Mbps</span>
+                  </ion-label>
            <section class="chart-wrapper">
       <canvas #stackedChart height="100"></canvas>
    </section>
@@ -366,8 +391,8 @@
    </section>
           </ion-col>
         </ion-row>
-<div class="clear">&nbsp;</div>
-<!--<div id="exportSquareChart">
+            <div class="clear">&nbsp;</div>
+            <!--<div id="exportSquareChart">
   <ion-row>
     <ion-col class="border no-padding">
       <ion-list>
@@ -384,14 +409,14 @@
     </ion-col>
   </ion-row>
 </div>-->
-        
-        
 
-        
+
+
+
       </ion-grid>
       </div>
       </ion-col>
     </ion-row>
   </ion-grid>
-  
+
 </ion-content>
