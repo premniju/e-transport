@@ -83,12 +83,12 @@ export class DashboardPage {
     private _epdf: EImageHandlerProvider) {
 
     // color code for the charts
-    this.colors['Carrier 1'] = '#0099ff';
-    this.colors['Carrier 2'] = '#66ff99';
-    this.colors['Carrier 3'] = '#ff6666';
-    this.colors['Carrier 4'] = '#00ffdd';
-    this.colors['Carrier 5'] = '#ff99ff';
-    this.colors['Carrier 6'] = '#ffff66';
+    this.colors[1] = '#0099ff';
+    this.colors[2] = '#66ff99';
+    this.colors[3] = '#ff6666';
+    this.colors[4] = '#00ffdd';
+    this.colors[5] = '#ff99ff';
+    this.colors[6] = '#ffff66';
     this.colors['LAA'] = '#66ffff';
     this.colors['5G Small cell'] = '#ff9999';
     this.colors['Massive MIMO'] = '#ffcc99';
@@ -296,7 +296,7 @@ export class DashboardPage {
 
     if (data.checked == true) {
       this.selectedTechnologies.push(data);
-      this.technology['ca_' + data.shortname] = (typeof this.technology['ca_' + data.shortname] == 'undefined') ? 0 : this.technology['ca_' + data.shortname];
+      this.technology['ca_' + data.shortname] = ((typeof this.technology['ca_' + data.shortname] == 'undefined') ? 0 : this.technology['ca_' + data.shortname]) + ' Mbps';
     } else {
       let newArray = this.selectedTechnologies.filter(function (el) {
         return el.name !== data.name;
@@ -592,9 +592,9 @@ export class DashboardPage {
 
     for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
 
-      let value = (typeof this.baseline['ca_' + i] == 'undefined') ? 0 : this.baseline['ca_' + i];
+      let value = ((typeof this.baseline['ca_' + i] == 'undefined') ? 0 : this.baseline['ca_' + i]) + '';
       let technology = (typeof this.baseline['name_' + i] == 'undefined') ? 'Carrier ' + i : this.baseline['name_' + i];
-      this.report.push({ technology: technology, value: value });
+      this.report.push({ technology: technology, value: value, index: i });
     }
 
     this.selectedTechnologies.forEach((item, index) => {
@@ -614,12 +614,13 @@ export class DashboardPage {
     for (k in this.report) {
 
       var tech = this.report[k];
+      let color = (typeof this.colors[tech.technology] == 'undefined') ? this.colors[tech.index] : this.colors[tech.technology];
 
-      this.stackedChartData.push({ data: [tech.value], backgroundColor: this.colors[tech.technology], label: tech.technology });
+      this.stackedChartData.push({ data: [tech.value], backgroundColor: color, label: tech.technology });
 
       this.chartLabels.push(tech.technology);
       this.chartValues.push(tech.value);
-      this.chartColours.push(this.colors[tech.technology]);
+      this.chartColours.push(color);
 
     }
 
@@ -690,7 +691,7 @@ export class DashboardPage {
         },
         centerText: {
           display: true,
-          text: this.TTPeakValue
+          text: this.TTPeakValue + ' Mbps'
         }
       });
 
