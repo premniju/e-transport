@@ -144,24 +144,10 @@ export class EImageHandlerProvider {
 
     this.pdfObj = pdfMake.createPdf(this.docDefinition);
 
-    if (this.plt.is('cordova')) {
-      this.pdfObj.getBuffer((buffer) => {
-        var blob = new Blob([buffer], { type: 'application/pdf' });
-        // Save the PDF to the data Directory of our App
-        this.file.writeFile(this.file.dataDirectory, 'eReport.pdf', blob, { replace: true }).then(fileEntry => {
-
-          // Open the PDf with the correct OS tools
-          this.fileOpener.open(this.file.dataDirectory + 'eReport.pdf', 'application/pdf');
-        }).catch(err => {
-          console.log('Directory doesn\'t exist');
-          console.log(err);
-        });
-      });
-    } else {
-      // On a browser simply use download!
+   
 
       this.pdfObj.download("eReport.pdf");
-    }
+   
 
   }
 

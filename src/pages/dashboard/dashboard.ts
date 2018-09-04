@@ -832,7 +832,7 @@ this.pdfCss='e-opacity';
         charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 20, 5, 5], style: 'squareImage' });
         obj._epdf.generatePDF(charts);
         obj.isPdf =false;
-        this.pdfCss='';
+        obj.pdfCss='';
       })
         .catch((err) => {
           console.log("error canvas", err);
@@ -861,7 +861,7 @@ this.pdfCss='e-opacity';
           charts.push({ image: canvas.toDataURL(), alignment: 'center', style: 'squareImage' });
           obj._epdf.generatePDF(charts);
           obj.isPdf =false;
-          this.pdfCss='';
+          obj.pdfCss='';
         })
         .catch((err) => {
           console.log("error canvas", err);
@@ -898,7 +898,7 @@ this.pdfCss='e-opacity';
           charts.push({ image: canvas.toDataURL(), alignment: 'center', style: 'squareImage' });
           obj._epdf.generatePDF(charts);
           obj.isPdf =false;
-          this.pdfCss='';
+          obj.pdfCss='';
         })
         .catch((err) => {
           console.log("error canvas", err);
