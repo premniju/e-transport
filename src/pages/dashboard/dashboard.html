@@ -208,7 +208,9 @@
                       <div *ngFor="let item of t.carrierList; let i = index;">
                         <ion-row class="e-row center-text" [ngClass]="(i % 2 == 0) ? 'odd' : 'even'">
                           <ion-col align-self-center>
-                            <ion-label>{{item}}</ion-label>
+                            <!--<ion-label>{{item}}</ion-label>-->
+                            <ion-input type="text" [(ngModel)]="technology['name_'+item+'_'+t.shortname]" (input)="onEvoluationChange(technology['name_'+item+'_'+t.shortname],'name_',item,t.shortname,$event.target.value)"></ion-input>
+                            
                           </ion-col>
                           <ion-col align-self-center>
                             <select [(ngModel)]="technology['chCapacity_'+item+'_'+t.shortname]" (change)="onEvoluationChange(technology['chCapacity_'+item+'_'+t.shortname],'chCapacity_',item,t.shortname)">

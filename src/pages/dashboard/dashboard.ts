@@ -108,9 +108,6 @@ export class DashboardPage {
     this.operator['M'] = [];
 
     console.log(this.carrierlist);
-
-
-
   }
 
   /**
@@ -125,9 +122,6 @@ export class DashboardPage {
    * Load the pre configure information on customer change 
    */
   onOperatorChange(operator: any) {
-    console.log("asdasdas", operator);
-    //this.reset();
-    console.log("Am I here");
     operator = (operator) ? operator : 'A';
     this.populateOperatorInfo(operator);
     this.getCbValue();
@@ -333,8 +327,14 @@ export class DashboardPage {
   /**
    * All Baseline form value change event.
    */
-  onEvoluationChange(selectedValue: any, field: any, carrier: any, technology: any) {
+  onEvoluationChange(selectedValue: any, field: any, carrier: any, technology: any, value?: any) {
 
+    if (field == "name_") {
+      this.technology[field + carrier + '_' + technology] = value || 1;
+    }
+    else {
+      this.technology[field + carrier + '_' + technology] = selectedValue;
+    }
     this.technology[field + carrier + '_' + technology] = selectedValue;
     let nCells = this.technology['nCells_' + carrier + '_' + technology];
     let chCapacity = this.technology['chCapacity_' + carrier + '_' + technology];
@@ -350,7 +350,7 @@ export class DashboardPage {
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
       this.technology['ca_' + carrier + '_' + technology] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn, cpr);
     }
-    console.log(this.technology)
+    console.log("this.technology---", this.technology);
     this.getCbValue();
 
   }
@@ -604,6 +604,7 @@ export class DashboardPage {
 
       let value = (typeof this.technology['ca_' + item.shortname] == 'undefined') ? 0 : this.technology['ca_' + item.shortname];
       let technology = item.name;
+      //let technology = (typeof this.technology['name_' + index + "_" + item.shortname] == 'undefined') ? item.shortname + index : this.technology['name_' + index + "_" + item.shortname];
       if (value > 0)
         this.report.push({ technology: technology, value: value });
     });
