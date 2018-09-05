@@ -385,6 +385,14 @@ export class DashboardPage {
     //console.log("Download data", JSON.parse(localStorage.getItem("Input_Data")));
 
     objArray = JSON.parse(localStorage.getItem("Input_Data"));
+    if(objArray == null){
+      this.altCtrl.create({
+        title: 'Alert',
+        subTitle: "CSV format file only supported!!",
+        buttons: ['OK']
+      }).present();
+      return ;
+    }
     console.log("objArray", objArray);
     var result = objArray.map(obj => {
       if (obj["S. No"] === null) {
@@ -637,7 +645,7 @@ export class DashboardPage {
       ctx = chart.chart.ctx;
 
     ctx.restore();
-    var fontSize = (height / 154).toFixed(2);
+    var fontSize = (height / 174).toFixed(2);
     ctx.font = fontSize + "em sans-serif";
     ctx.textBaseline = "middle";
 
