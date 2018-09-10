@@ -1,6 +1,8 @@
 export const AppVariables = {
   EAUTH_URL: "http://192.168.34.237:3500/auth",
   APP_TOKEN: "V4Z0miz5nybWlzAzSQ",
+  USERNAME:"admin",
+  PASSWORD:"1qazZAQ!",
   CARRIER_LIMIT: 6,
   NCARRIERS: [1, 2, 3, 4, 5, 6],
   NCELLS: [{ value: 1, name: 1 }, { value: 2, name: 2 }, { value: 3, name: 3 }],

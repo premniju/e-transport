@@ -1,13 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, App, NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
-import { LoginPage } from '../login/login';
-import { HomePage } from '../home/home';
 import { AdvanceEditPage } from '../advance-edit/advance-edit';
 import { AppVariables, AppVariables_Tech } from "../../config/app-variables";
 import { EDimmensionProvider } from "../../providers/e-dimmension/e-dimmension";
 import * as  Papa from 'papaparse';
 import { EMailProvider } from '../../providers/e-mail/e-mail';
-import { EPdfProvider } from '../../providers/e-pdf/e-pdf';
 import { EImageHandlerProvider } from '../../providers/e-image-handler/e-image-handler';
 import { Chart } from 'chart.js';
 import * as html2canvas from 'html2canvas';
@@ -50,8 +47,8 @@ export class DashboardPage {
   public technologyList: any = AppVariables_Tech.TECHNOLOGY_LIST;
   public selectedTechnologies: any = [];
   public techCb: number;
-  public isPdf:any =false;
-  public pdfCss:any='';
+  public isPdf: any = false;
+  public pdfCss: any = '';
 
 
   public inputData: any[] = [];
@@ -84,6 +81,7 @@ export class DashboardPage {
     private modalCtrl: ModalController,
     private _email: EMailProvider,
     private _epdf: EImageHandlerProvider) {
+   
 
     // color code for the charts
     this.colors[1] = '#0099ff';
@@ -99,6 +97,12 @@ export class DashboardPage {
     this.colors['eMBB'] = '#cc9999';
     this.colors['Manual'] = '#33ffcc';
 
+    let userInfo = JSON.parse(localStorage.getItem("userData"));
+
+    if (userInfo == null) {
+      this.logout();
+    }
+
 
   }
 
@@ -110,13 +114,16 @@ export class DashboardPage {
     this.operator['C'] = AppVariables.OPERATOR_C;
     this.operator['M'] = [];
 
-    console.log(this.carrierlist);
+    
   }
 
   /**
    * Logout
    */
   logout() {
+
+    
+    localStorage.clear();
     let nav = this.app.getRootNav();
     nav.setRoot('login');
 
@@ -153,7 +160,7 @@ export class DashboardPage {
       this.onBaselineChange(item.mimo, 'mimo_', i);
 
     });
-    console.log(this.baseline)
+    
   }
   addRow(section: any, technology: any) {
     if (section == 'Baseline') {
@@ -209,39 +216,13 @@ export class DashboardPage {
         }).present();
 
       }
-      console.log(this.selectedTechnologies)
+      
 
     }
 
 
   }
 
-  /**
-   * Define the default value on carrier change;
-   */
-  onCarrierChange(selectedValue: any) {
-
-    this.selectedCarrierList = this.carrierlist.slice(0, this.carrier);
-    this.formElements['selectedCarrier'] = this.carrier;
-    for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
-
-      // this.formElements['thresholdValue_' + i] = (typeof this.formElements['thresholdValue_' + i] == 'undefined') ? this.tn : this.formElements['thresholdValue_' + i];
-      // this.formElements['isShow' + i] = false;
-      // this.formElements['icon' + i] = 'add-circle';
-      // this.formElements['advanceEditBtn' + i] = "Advance Edit";
-      // this.formElements['advanceEditIcon' + i] = "ios-create-outline";
-      // this.formElements['eTnValue_' + i] = (typeof this.formElements['eTnValue_' + i] == 'undefined') ? this.tn : this.formElements['eTnValue_' + i];
-      // this.formElements['eMimoValue_' + i] = (typeof this.formElements['eMimoValue_' + i] == 'undefined') ? this.formElements['mimo_' + i] : this.formElements['eMimoValue_' + i];
-
-      // this.formElements['cprValue_' + i] = (typeof this.formElements['cprValue_' + i] == 'undefined') ? this.cpr : this.formElements['cprValue_' + i];
-      // this.formElements['eCprValue_' + i] = (typeof this.formElements['eCprValue_' + i] == 'undefined') ? this.cpr : this.formElements['eCprValue_' + i];
-
-      // this.formElements['ca_' + i] = (typeof this.formElements['ca_' + i] == 'undefined') ? 0 : this.formElements['ca_' + i];
-    }
-
-    this.getCbValue();
-
-  }
   /**
    * Calculate the Cb value
    */
@@ -291,7 +272,7 @@ export class DashboardPage {
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
       this.baseline['ca_' + item] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, 'carrier', tn, cpr);
     }
-    console.log(this.baseline)
+    
     this.getCbValue();
 
   }
@@ -299,24 +280,24 @@ export class DashboardPage {
 
     if (data.checked == true) {
       this.selectedTechnologies.push(data);
-      this.technology['ca_' + data.shortname] = ((typeof this.technology['ca_' + data.shortname] == 'undefined') ? 0 : this.technology['ca_' + data.shortname]) ;
+      this.technology['ca_' + data.shortname] = ((typeof this.technology['ca_' + data.shortname] == 'undefined') ? 0 : this.technology['ca_' + data.shortname]);
     } else {
       let newArray = this.selectedTechnologies.filter(function (el) {
         return el.name !== data.name;
       });
       this.selectedTechnologies = newArray;
     }
-    console.log(this.selectedTechnologies);
+    
   }
   hideShowTechnology(data: any) {
 
     if (data.icon == 'md-arrow-dropup') {
-      console.log('close');
+      
       this.selectedTechnologies.filter(function (el) {
         return el.name == data.name;
       })[0].icon = 'md-arrow-dropdown';
     } else {
-      console.log('open');
+      
       this.selectedTechnologies.filter(function (el) {
         return el.name == data.name;
       })[0].icon = 'md-arrow-dropup';
@@ -350,14 +331,14 @@ export class DashboardPage {
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
       this.technology['ca_' + carrier + '_' + technology] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn, cpr);
     }
-    console.log("this.technology---", this.technology);
+    
     this.getCbValue();
 
   }
   upload_file(event: any) {
-    console.log(event.target.files[0].name)
+    
     let fileName = event.target.files[0].name.split('.');
-    console.log(fileName[1].toLowerCase())
+    
 
     if (fileName[1].toLowerCase() == 'csv') {
       Papa.parse(event.target.files[0], {
@@ -366,7 +347,7 @@ export class DashboardPage {
         complete: function (results) {
           this.inputData = results.data;
 
-          console.log("input data", this.inputData);
+          
           localStorage.setItem("Input_Data", JSON.stringify(this.inputData));
         }
       });
@@ -382,19 +363,19 @@ export class DashboardPage {
   download_file() {
     let objArray: any = [];
     let outputArray: any = [];
-    //console.log("Download data", JSON.parse(localStorage.getItem("Input_Data")));
+    
 
     objArray = JSON.parse(localStorage.getItem("Input_Data"));
-    if(objArray == null){
+    if (objArray == null) {
       this.altCtrl.create({
         title: 'Alert',
-        subTitle: "CSV format file only supported!!",
+        subTitle: "Please upload the input file inorder to download the report!!",
         buttons: ['OK']
       }).present();
-      return ;
+      return;
     }
-    console.log("objArray", objArray);
-    var result = objArray.map(obj => {
+    
+     objArray.map(obj => {
       if (obj["S. No"] === null) {
         return;
       }
@@ -411,15 +392,17 @@ export class DashboardPage {
       obj["Utilization (%) based on theoritical peak"] = g + "%";
 
       let i: number = this.TTPeakValue;
-      let h = obj["Evolution Theoritical Peak Througput (in Mbps)"] = i - f;
+      let h =  i - f;
+      obj["Evolution Theoritical Peak Througput (in Mbps)"] = h;
       obj["Total Theoritical Peak Throuput Required (Mbps)"] = this.TTPeakValue;
-      let j = obj["Capacity Required (in Mbps)"] = Math.round(i * utilization);
+      let j = Math.round(i * utilization);
+      obj["Capacity Required (in Mbps)"] = j;
 
       outputArray.push(obj);
     });
 
     let output_csv = Papa.unparse(outputArray, { header: true });
-    //console.log("JSON-CSV", output_csv);
+    
 
     let blob = new Blob([output_csv]);
     let a: any = window.document.createElement("a");
@@ -473,7 +456,7 @@ export class DashboardPage {
           text: 'Cancel',
           role: 'cancel',
           handler: data => {
-            console.log('Cancel clicked');
+            
           }
         },
         {
@@ -511,7 +494,7 @@ export class DashboardPage {
     }
     let myModal = this.modalCtrl.create(AdvanceEditPage, { 'data': { tn: tn, cpr: cpr, mimo: mimo, shortName: shortName, item: item } });
     myModal.onDidDismiss(data => {
-      console.log(data);
+      
       if (data) {
         if (data.shortName == 'baseline') {
           this.baseline['thresholdValue_' + item] = data.tn;
@@ -542,7 +525,7 @@ export class DashboardPage {
 
     this.formData = [];
     let data = [];
-    // for (let i = 1; i <= this.formElements.selectedCarrier; i++) {
+
     for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
 
       let chCapacity = this.baseline["chCapacity_" + i];
@@ -560,15 +543,13 @@ export class DashboardPage {
       }
     }
 
-    // if (this.formElements['selectedTechnologies']) {
-    //   for (let s = 0; s < this.formElements['selectedTechnologies'].length; s++) {
+
     this.selectedTechnologies.forEach((item, index) => {
 
-      let techShortName = item.shortname;
-      let technology = item.name;
+      let techShortName = item.shortname;      
       let selectedCarrier = item.carrier;
 
-      // if (this.formElements['selectedcarrier_' + techShortName]) {
+
 
       for (let t = 1; t <= selectedCarrier; t++) {
 
@@ -578,9 +559,9 @@ export class DashboardPage {
         let mimoValue = this.technology["mimo_" + t + "_" + techShortName];
         let carrier = this.technology['name_' + t + '_' + techShortName];
         let ca = this.technology["ca_" + t + "_" + techShortName];
-        console.log(AppVariables.MIMO.filter(item => item.value === parseFloat(mimoValue)));
+       
         let mimoName = AppVariables.MIMO.filter(item => item.value === parseFloat(mimoValue));
-        console.log(mimoName)
+        
         let mimo = (mimoName.length == 0) ? null : mimoName[0].name;
         if (ca > 0)
           data.push({ name: carrier, sectors: nCell, channelBw: chCapacity, mimo: mimo, qam: qam, ca: ca, class: ('c-' + techShortName) });
@@ -588,8 +569,7 @@ export class DashboardPage {
           this.formData.push(data);
           data = [];
         }
-        // }
-        // }
+
       }
     });
 
@@ -783,16 +763,6 @@ export class DashboardPage {
         data: {
           labels: this.chartLabels,
           datasets: this.stackedChartData
-          //  [
-          //    {
-          //    label                 : 'CSR Capacity',
-          //     data                  : this.chartValues,
-          //     duration              : 2000,
-          //     easing                : 'easeInQuart',
-          //     backgroundColor       : this.chartColours,
-          //     // hoverBackgroundColor  : this.chartHoverColours
-          //  }
-          //  ]
         },
         options: {
           legend: {
@@ -820,8 +790,8 @@ export class DashboardPage {
       });
   }
   downloadPdf() {
-this.isPdf =true;
-this.pdfCss='e-opacity';
+    this.isPdf = true;
+    this.pdfCss = 'e-opacity';
     let charts = [];
     var obj = this;
     if (this.formData.length <= 3) {
@@ -839,8 +809,8 @@ this.pdfCss='e-opacity';
 
         charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 20, 5, 5], style: 'squareImage' });
         obj._epdf.generatePDF(charts);
-        obj.isPdf =false;
-        obj.pdfCss='';
+        obj.isPdf = false;
+        obj.pdfCss = '';
       })
         .catch((err) => {
           console.log("error canvas", err);
@@ -868,8 +838,8 @@ this.pdfCss='e-opacity';
         .then(function (canvas) {
           charts.push({ image: canvas.toDataURL(), alignment: 'center', style: 'squareImage' });
           obj._epdf.generatePDF(charts);
-          obj.isPdf =false;
-          obj.pdfCss='';
+          obj.isPdf = false;
+          obj.pdfCss = '';
         })
         .catch((err) => {
           console.log("error canvas", err);
@@ -905,8 +875,8 @@ this.pdfCss='e-opacity';
         .then(function (canvas) {
           charts.push({ image: canvas.toDataURL(), alignment: 'center', style: 'squareImage' });
           obj._epdf.generatePDF(charts);
-          obj.isPdf =false;
-          obj.pdfCss='';
+          obj.isPdf = false;
+          obj.pdfCss = '';
         })
         .catch((err) => {
           console.log("error canvas", err);

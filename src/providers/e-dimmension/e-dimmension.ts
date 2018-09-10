@@ -48,7 +48,7 @@ export class EDimmensionProvider {
         break;
 
     }
-    console.log(technology)
+    
 
     //let nCells=3; //Number of cells under DU/Baseband
 

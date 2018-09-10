@@ -163,7 +163,7 @@ export class HomePage {
    * load the operator default configuration
    */
   loadOperator(operator) {
-    console.log("asdasd");
+    
     this.carrier = this.operator[operator].length;
     this.onCarrierChange(this.carrier);
     this.selectedCarrierList = this.carrierlist.slice(0, this.carrier);
@@ -400,7 +400,7 @@ export class HomePage {
     let add = (technology) ? ('_' + technology) : '';
 
     if (this.formElements['isShowAdvanceEditable' + item + add]) {
-      console.log("here1");
+      
       this.formElements['isShowAdvanceEditable' + item + add] = false;      
       this.formElements['advanceEditBtn' + item + add] = "Advance Edit";
       this.formElements['advanceEditIcon' + item + add] = "ios-create-outline";
@@ -495,9 +495,9 @@ export class HomePage {
             let mimoValue = this.formElements["mimo_" + t + "_" + techShortName];
             let carrier = "Carrier " + t + " " + technology;
             let ca = this.formElements["ca_" + t + "_" + techShortName];
-            console.log(AppVariables.MIMO.filter(item => item.value === parseFloat(mimoValue)));
+            
             let mimoName = AppVariables.MIMO.filter(item => item.value === parseFloat(mimoValue));
-            console.log(mimoName)
+            
             let mimo = (mimoName.length == 0) ? null : mimoName[0].name;
             if (ca > 0)
               data.push({ name: carrier, sectors: nCell, channelBw: chCapacity, mimo: mimo, qam: qam, ca: ca, class: ('c-' + techShortName) });
@@ -606,12 +606,9 @@ export class HomePage {
       return Object.prototype.toString.call(obj) === '[object Array]';
     };
 
-  sendMail() {
-    var canvas : any =document.getElementById("pieChart");
-  //  console.log(canvas)
-      var ctx=canvas.getContext("2d");
+  sendMail() {    
   let attachment = this.pieChartEl.toBase64Image();
-  //console.log(ctx.getImageData(0,0,224,300));
+  
     this._email.sendMail(AppVariables.EXECUTIVE_EMAIL, AppVariables.EXECUTIVE_EMAIL, AppVariables.EXECUTIVE_EMAIL,attachment, AppVariables.EMAIL_SUBJECT, null);
   }
 

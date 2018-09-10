@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, Loading, AlertController,Platform } from 'ionic-angular';
 import { EAuthProvider } from '../../providers/e-auth/e-auth';
 import {HomePage} from '../home/home';
-import {DashboardPage} from '../dashboard/dashboard';
+
 
 /**
  * Generated class for the LoginPage page.

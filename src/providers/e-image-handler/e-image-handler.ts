@@ -10,8 +10,8 @@ import { EMailProvider } from '../e-mail/e-mail';
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
 import { SocialSharing } from '@ionic-native/social-sharing';
-import * as html2canvas from 'html2canvas';
-import { AppVariables } from "../../config/app-variables";
+
+
 
 /*
   Generated class for the EImageHandlerProvider provider.
@@ -19,7 +19,7 @@ import { AppVariables } from "../../config/app-variables";
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-declare let cordova: any;
+
 @Injectable()
 export class EImageHandlerProvider {
 

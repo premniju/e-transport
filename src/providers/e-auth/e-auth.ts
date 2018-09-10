@@ -1,4 +1,4 @@
-import { HttpClient,HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppVariables } from "../../config/app-variables";
 
@@ -19,7 +19,7 @@ export class EAuthProvider {
    return new Promise((resolve, reject) => {     
 
 		 
-		 if(credentials.username=="admin" && credentials.password=="1qazZAQ!"){
+		 if(credentials.username==AppVariables.USERNAME && credentials.password==AppVariables.PASSWORD){
 				resolve({success:true,user:{ username:credentials.username,password:credentials.password}});
 		 }else{
   		reject({message:"Invalid user credentials!"});

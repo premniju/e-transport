@@ -4,10 +4,7 @@ import { Chart } from 'chart.js';
 import { EMailProvider } from '../../providers/e-mail/e-mail';
 import {EImageHandlerProvider} from "../../providers/e-image-handler/e-image-handler";
 import { AppVariables } from "../../config/app-variables";
-import * as jsPDF from 'jspdf';
-import * as html2canvas from 'html2canvas';
-import { File } from '@ionic-native/file';
-import { FileOpener } from '@ionic-native/file-opener';
+
 
 /**
  * Generated class for the ChartPage page.
@@ -35,13 +32,12 @@ export class ChartPage {
   public colors: any = [];
   public report: any = [];
   public formData: any = [];
-  fileName:string;
+  
   constructor(public navCtrl: NavController,
     public _email: EMailProvider,
     public _image: EImageHandlerProvider,
-    public navParams: NavParams,
-    private file:File,
-    private fileOpener : FileOpener) {
+    public navParams: NavParams
+    ) {
 
     this.report = this.navParams.data.report;
 
@@ -239,82 +235,12 @@ export class ChartPage {
    */
   download() {
 
-    let dataBlob = this._image.downloadPdf(this.pieChartEl.toBase64Image());
-
-  }
-
-  /**
-   * Send Mail
-   */
-  send() {
     this._image.downloadPdf(this.pieChartEl.toBase64Image());
 
   }
 
-  generatePdf(){
-    const div = document.getElementById("Html2Pdf");
-    const options = {background:"white",height :div.clientHeight , width : div.clientWidth  };
-    html2canvas(div,options).then((canvas)=>{
-      //Initialize JSPDF
-      var doc = new jsPDF("p","mm","a4");
-      //Converting canvas to Image
-      let imgData = canvas.toDataURL("image/PNG");
-      //Add image Canvas to PDF
-      doc.addImage(imgData, 'PNG', 20,20 );
-      let pdfOutput = doc.output();
-      let buffer = new ArrayBuffer(pdfOutput.length);
-      let array = new Uint8Array(buffer);
-      for (var i = 0; i < pdfOutput.length; i++) {
-          array[i] = pdfOutput.charCodeAt(i);
-      }
+ 
 
-
-      //This is where the PDF file will stored , you can change it as you like
-      // for more information please visit https://ionicframework.com/docs/native/file/
-      const directory = this.file.dataDirectory ;
-
-      //Name of pdf
-      const fileName ="eReport.pdf";
-
-      var blob = new Blob([buffer], { type: 'application/pdf' });    
-      
-      //Writing File to Device
-      // this.file.writeFile(this.file.dataDirectory,fileName,blob)
-      // .then((success) => {
-      //   console.log("File created Succesfully" + JSON.stringify(success));
-      //   //open File
-      //   //success.nativeURL
-      //   this.fileOpener.open(this.file.dataDirectory + fileName, "application/pdf")
-      //   .then((success) =>{
-      //     console.log("File Opened Succesfully" + JSON.stringify(success));
-      //   })
-      //   .catch((error)=> console.log("Cannot Open File " +JSON.stringify(error))); 
-        
-        
-      // })
-      // .catch((error)=> console.log("Cannot Create File " +JSON.stringify(error)));
-
-
-     // this.pdfObj.getBuffer((buffer) => {
-                var blob = new Blob([buffer], { type: 'application/pdf' });        
-                // Save the PDF to the data Directory of our App
-                this.file.writeFile(this.file.dataDirectory, 'eReport.pdf', blob, { replace: true }).then(fileEntry => {
-                 
-                  // Open the PDf with the correct OS tools
-                 this.fileOpener.open(this.file.dataDirectory + 'eReport.pdf', 'application/pdf');
-                })
-             // });
   
-  
-    });
-  }
-checkFile(){
-    //check if file exist on device
-    const directory = this.file.externalApplicationStorageDirectory  ;
-    const fileName = this.fileName + ".pdf";
-    this.file.checkFile(directory,fileName)
-    .then((success)=> console.log("PDF file exsit : " + JSON.stringify(success)))
-    .catch((error)=> console.log("Cannot find Pdf file : " +JSON.stringify(error)));
-  }
 
 }

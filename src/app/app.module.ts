@@ -6,10 +6,10 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { LoginPage } from '../pages/login/login';
+// import { LoginPage } from '../pages/login/login';
 import { ChartPage } from '../pages/chart/chart';
 import { AdvanceEditPage } from '../pages/advance-edit/advance-edit';
-import {DashboardPage} from '../pages/dashboard/dashboard';
+// import {DashboardPage} from '../pages/dashboard/dashboard';
 import { EAuthProvider } from '../providers/e-auth/e-auth';
 import { HttpClientModule } from '@angular/common/http';
 import { EmailComposer } from '@ionic-native/email-composer';
