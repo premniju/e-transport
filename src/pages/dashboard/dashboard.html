@@ -86,6 +86,9 @@
               <ion-col>
                 <ion-label>Capacity</ion-label>
               </ion-col>
+              <ion-col>
+                <ion-label>Remove</ion-label>
+              </ion-col>
             </ion-row>
             <div *ngIf="config">
               <div *ngFor="let item of selectedCarrierList; let i = index;">
@@ -93,41 +96,42 @@
                   <ion-col align-self-center>
                           <!-- <ion-label>{{baseline['name_'+item]}}</ion-label> -->
                           <!--<ion-item class="rounded">-->
-                          <ion-input class="rounded"  maxlength="15" type="text" [(ngModel)]="baseline['name_'+item]" (input)="onBaselineChange(baseline['name_'+item],'name_',item,$event.target.value)"></ion-input>
+                          <ion-input class="rounded"  maxlength="15" type="text" [(ngModel)]="baseline[i].name" (input)="onBaselineChange(baseline[i].name,'name',i,$event.target.value)"></ion-input>
                           <!--</ion-item>-->
 
                   </ion-col>
                   <ion-col align-self-center>
-                    <select [(ngModel)]="baseline['chCapacity_'+item]" (change)="onBaselineChange(baseline['chCapacity_'+item],'chCapacity_',item)">
+                    <select [(ngModel)]="baseline[i].chCapacity" (change)="onBaselineChange(baseline[i].chCapacity,'chCapacity',i)">
                     <option *ngFor="let channel of channelCapacityList" value="{{channel.value}}">{{channel.name}}</option>
                   </select>
                   </ion-col>
 
                   <ion-col align-self-center>
-                    <select [(ngModel)]="baseline['mimo_'+item]" (change)="onBaselineChange(baseline['mimo_'+item],'mimo_',item)">
+                    <select [(ngModel)]="baseline[i].mimo" (change)="onBaselineChange(baseline[i].mimo,'mimo',i)">
                     <option *ngFor="let mimo of mimoList" value="{{mimo.value}}">{{mimo.name}}</option>
                   </select>
                   </ion-col>
 
                   <ion-col align-self-center>
-                    <select [(ngModel)]="baseline['qam_'+item]" (change)="onBaselineChange(baseline['qam_'+item],'qam_',item)">
+                    <select [(ngModel)]="baseline[i].qam" (change)="onBaselineChange(baseline[i].qam,'qam',i)">
                     <option *ngFor="let qam of qamList" value="{{qam.value}}">{{qam.name}}</option>
                   </select>
                   </ion-col>
 
                   <ion-col align-self-center>
-                    <select [(ngModel)]="baseline['nCells_'+item]" (change)="onBaselineChange(baseline['nCells_'+item],'nCells_',item)">
+                    <select [(ngModel)]="baseline[i].nCells" (change)="onBaselineChange(baseline[i].nCells,'nCells',i)">
                     <option *ngFor="let cell of nCellsList" value="{{cell.value}}">{{cell.name}}</option>
                   </select>
                   </ion-col>
 
-                  <ion-col align-self-center>
-                    <!--<ion-icon name="create" (click)="presentPrompt(item,'baseline')"></ion-icon>-->
-                     <ion-icon name="create" (click)="advanceEdit(item,'baseline')"></ion-icon>
-
+                  <ion-col align-self-center>                    
+                     <ion-icon name="create" (click)="advanceEdit(i,'baseline')"></ion-icon>
                   </ion-col>
                   <ion-col align-self-center>
-                    <ion-label>{{baseline['ca_'+item] }}Mbps</ion-label>
+                    <ion-label>{{baseline[i]['ca'] }}Mbps</ion-label>
+                  </ion-col>
+                   <ion-col align-self-center>                    
+                     <ion-icon name="trash" (click)="removeRow(i,'baseline')"></ion-icon>
                   </ion-col>
                 </ion-row>
               </div>
@@ -175,7 +179,7 @@
             <div *ngFor="let t of selectedTechnologies">
               <ion-row class="e-border-bottom e-box-shadow">
                       <ion-label class="m-left-5 font-1-8">{{t.name}} (
-                        <span class="e-dimensional-value">{{ technology['ca_'+t.shortname] }} Mbps</span>)</ion-label>
+                        <span class="e-dimensional-value">{{ technology[t.shortname]['ca'] }} Mbps</span>)</ion-label>
                 <ion-icon color="primary"  class="float-right arrow" name="{{t.icon}}" (click)="hideShowTechnology(t)"></ion-icon>
               </ion-row>
             <div *ngIf="t.icon == 'md-arrow-dropup'">
@@ -206,43 +210,49 @@
                 <ion-col>
                   <ion-label>Capacity</ion-label>
                 </ion-col>
+                <ion-col>
+                  <ion-label>Remove</ion-label>
+                </ion-col>
               </ion-row>
               <div *ngFor="let item of t.carrierList; let i = index;">
                         <ion-row class="e-row center-text" [ngClass]="(i % 2 == 0) ? 'odd' : 'even'">
                   <ion-col align-self-center>
                             <!--<ion-label>{{item}}</ion-label>-->
-                            <ion-input class="rounded"  maxlength="15" type="text" [(ngModel)]="technology['name_'+item+'_'+t.shortname]" (input)="onEvoluationChange(technology['name_'+item+'_'+t.shortname],'name_',item,t.shortname,$event.target.value)">{{t.name}}{{t.carrier}}</ion-input>
+                            <ion-input class="rounded"  maxlength="15" type="text" [(ngModel)]="technology[t.shortname][i]['name']" (input)="onEvoluationChange(technology[t.shortname][i]['name'],'name',i,t.shortname,$event.target.value)">{{t.name}}{{t.carrier}}</ion-input>
                             
                   </ion-col>
                   <ion-col align-self-center>
-                    <select [(ngModel)]="technology['chCapacity_'+item+'_'+t.shortname]" (change)="onEvoluationChange(technology['chCapacity_'+item+'_'+t.shortname],'chCapacity_',item,t.shortname)">
+                    <select [(ngModel)]="technology[t.shortname][i]['chCapacity']" (change)="onEvoluationChange(technology[t.shortname][i]['chCapacity'],'chCapacity',i,t.shortname)">
                     <option *ngFor="let channel of channelCapacityList" value="{{channel.value}}">{{channel.name}}</option>
                   </select>
                   </ion-col>
 
                   <ion-col align-self-center>
-                    <select [(ngModel)]="technology['mimo_'+item+'_'+t.shortname]" (change)="onEvoluationChange(technology['mimo_'+item+'_'+t.shortname],'mimo_',item,t.shortname)">
+                    <select [(ngModel)]="technology[t.shortname][i]['mimo']" (change)="onEvoluationChange(technology[t.shortname][i]['mimo'],'mimo',i,t.shortname)">
                     <option *ngFor="let mimo of mimoList" value="{{mimo.value}}">{{mimo.name}}</option>
                   </select>
                   </ion-col>
 
                   <ion-col align-self-center>
-                    <select [(ngModel)]="technology['qam_'+item+'_'+t.shortname]" (change)="onEvoluationChange(technology['qam_'+item+'_'+t.shortname],'qam_',item,t.shortname)">
+                    <select [(ngModel)]="technology[t.shortname][i]['qam']" (change)="onEvoluationChange(technology[t.shortname][i]['qam'],'qam',i,t.shortname)">
                     <option *ngFor="let qam of qamList" value="{{qam.value}}">{{qam.name}}</option>
                   </select>
                   </ion-col>
 
                   <ion-col align-self-center>
-                    <select [(ngModel)]="technology['nCells_'+item+'_'+t.shortname]" (change)="onEvoluationChange(technology['nCells_'+item+'_'+t.shortname],'nCells_',item,t.shortname)">
+                    <select [(ngModel)]="technology[t.shortname][i]['nCells']" (change)="onEvoluationChange(technology[t.shortname][i]['nCells'],'nCells',i,t.shortname)">
                     <option *ngFor="let cell of nCellsList" value="{{cell.value}}">{{cell.name}}</option>
                   </select>
                   </ion-col>
 
                   <ion-col align-self-center>
-                    <ion-icon name="create" (click)="advanceEdit(item,t.shortname)"></ion-icon>
+                    <ion-icon name="create" (click)="advanceEdit(i,t.shortname)"></ion-icon>
                   </ion-col>
                   <ion-col align-self-center>
-                    <ion-label>{{technology['ca_'+item+'_'+t.shortname] }}Mbps</ion-label>
+                    <ion-label>{{technology[t.shortname][i]['ca']}}Mbps</ion-label>
+                  </ion-col>
+                  <ion-col align-self-center>                    
+                     <ion-icon name="trash" (click)="removeRow(i,t.shortname)"></ion-icon>
                   </ion-col>
                 </ion-row>
               </div>
@@ -292,6 +302,7 @@
         </ion-grid>
       </ion-col>
     </ion-row>
+    
     <div *ngIf="isPdf" class="{{ pdfCss }}">
       
     <ion-row>

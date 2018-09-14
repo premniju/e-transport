@@ -49,6 +49,7 @@ export class DashboardPage {
   public techCb: number;
   public isPdf: any = false;
   public pdfCss: any = '';
+  
 
 
   public inputData: any[] = [];
@@ -81,7 +82,7 @@ export class DashboardPage {
     private modalCtrl: ModalController,
     private _email: EMailProvider,
     private _epdf: EImageHandlerProvider) {
-   
+
 
     // color code for the charts
     this.colors[1] = '#0099ff';
@@ -114,7 +115,7 @@ export class DashboardPage {
     this.operator['C'] = AppVariables.OPERATOR_C;
     this.operator['M'] = [];
 
-    
+
   }
 
   /**
@@ -122,7 +123,7 @@ export class DashboardPage {
    */
   logout() {
 
-    
+
     localStorage.clear();
     let nav = this.app.getRootNav();
     nav.setRoot('login');
@@ -147,31 +148,31 @@ export class DashboardPage {
     this.baseline = [];
     this.operator[operator].forEach((item, index) => {
       let i = index + 1;
-      this.baseline['name_' + i] = (typeof this.baseline['name_' + i] == 'undefined') ? "Carrier " + i : this.baseline['name_' + i];
-      this.baseline['nCells_' + i] = item.nCells;
-      this.baseline['chCapacity_' + i] = item.chCapacity;
-      this.baseline['qam_' + i] = item.qam;
-      this.baseline['mimo_' + i] = item.mimo;
-      this.baseline['mimoValue_' + i] = this.baseline['mimo_' + i];
 
-      this.baseline['thresholdValue_' + i] = (typeof this.baseline['thresholdValue_' + i] == 'undefined') ? AppVariables.TRANSPORTTHRESHOLD : this.baseline['thresholdValue_' + i];
-      this.baseline['cprValue_' + i] = (typeof this.baseline['cprValue_' + i] == 'undefined') ? AppVariables.CPR.filter(item => item.name === 'manual')[0].value : this.baseline['cprValue_' + i];
-
-      this.onBaselineChange(item.mimo, 'mimo_', i);
+      let name = (typeof this.baseline[index] == 'undefined') ? "Carrier " + i : this.baseline[index].name;
+      let thresholdValue = (typeof this.baseline[index] == 'undefined') ? AppVariables.TRANSPORTTHRESHOLD : this.baseline[index].thresholdValue;
+      let cprValue = (typeof this.baseline[index] == 'undefined') ? AppVariables.CPR.filter(item => item.name === 'manual')[0].value : this.baseline[index].cprValue;
+      let data = { 'name': name, nCells: item.nCells, chCapacity: item.chCapacity, qam: item.qam, mimo: item.mimo, mimoValue: item.mimo, thresholdValue: thresholdValue, cprValue: cprValue };
+      this.baseline.push(data);
+      this.onBaselineChange(item.mimo, 'mimo', index);
 
     });
-    
+
   }
   addRow(section: any, technology: any) {
     if (section == 'Baseline') {
 
       if (AppVariables.CARRIER_LIMIT > this.carrier) {
+        let index: any = this.carrier;
         this.carrier = +this.carrier + 1;
 
-        this.baseline['name_' + this.carrier] = 'Carrier ' + this.carrier;
-        this.baseline['thresholdValue_' + this.carrier] = (typeof this.baseline['thresholdValue_' + this.carrier] == 'undefined') ? AppVariables.TRANSPORTTHRESHOLD : this.baseline['thresholdValue_' + this.carrier];
-        this.baseline['cprValue_' + this.carrier] = (typeof this.baseline['cprValue_' + this.carrier] == 'undefined') ? AppVariables.CPR.filter(item => item.name === 'manual')[0].value : this.baseline['cprValue_' + this.carrier];
-        this.baseline['mimoValue_' + this.carrier] = (typeof this.baseline['mimoValue_' + this.carrier] == 'undefined') ? null : this.baseline['mimoValue_' + this.carrier];
+        if (typeof this.baseline[index] == 'undefined')
+          this.baseline[index] = {};
+
+        this.baseline[index]['name'] = 'Carrier ' + this.carrier;
+        this.baseline[index]['thresholdValue'] = (typeof this.baseline[index].thresholdValue == 'undefined') ? AppVariables.TRANSPORTTHRESHOLD : this.baseline[index].thresholdValue;
+        this.baseline[index]['cprValue'] = (typeof this.baseline[index].cprValue == 'undefined') ? AppVariables.CPR.filter(item => item.name === 'manual')[0].value : this.baseline[index].cprValue;
+        this.baseline[index]['mimoValue'] = (typeof this.baseline[index].mimoValue == 'undefined') ? null : this.baseline[index].mimoValue;
 
         this.selectedCarrierList = this.carrierlist.slice(0, this.carrier);
       } else {
@@ -192,6 +193,7 @@ export class DashboardPage {
       let carrier = tech[0].carrier;
       let shortname = tech[0].shortname;
 
+      let index = carrier;
       if (AppVariables.CARRIER_LIMIT > carrier) {
         carrier = +tech[0].carrier + 1;
         this.selectedTechnologies.filter(function (el) {
@@ -202,10 +204,16 @@ export class DashboardPage {
           return el.name == technology;
         })[0].carrierList = this.carrierlist.slice(0, carrier);
 
-        this.technology['name_' + carrier + '_' + shortname] = tech[0].name + ' ' + carrier;
-        this.technology['thresholdValue_' + carrier + '_' + shortname] = (typeof this.technology['thresholdValue_' + carrier + '_' + shortname] == 'undefined') ? AppVariables.TRANSPORTTHRESHOLD : this.technology['thresholdValue_' + carrier + '_' + shortname];
-        this.technology['cprValue_' + carrier + '_' + shortname] = (typeof this.technology['cprValue_' + carrier + '_' + shortname] == 'undefined') ? AppVariables.CPR.filter(item => item.name === shortname)[0].value : this.technology['cprValue_' + carrier + '_' + shortname];
-        this.technology['mimoValue_' + carrier + '_' + shortname] = (typeof this.technology['mimoValue_' + carrier + '_' + shortname] == 'undefined') ? null : this.technology['mimoValue_' + carrier + '_' + shortname];
+        if (typeof this.technology[shortname] == 'undefined')
+          this.technology[shortname] = [];
+        if (typeof this.technology[shortname][index] == 'undefined')
+          this.technology[shortname][index] = {};
+
+
+        this.technology[shortname][index]['name'] = tech[0].name + ' ' + carrier;
+        this.technology[shortname][index]['thresholdValue'] = (typeof this.technology[shortname][index].thresholdValue == 'undefined') ? AppVariables.TRANSPORTTHRESHOLD : this.technology[shortname][index]['thresholdValue'];
+        this.technology[shortname][index]['cprValue'] = (typeof this.technology[shortname][index].cprValue == 'undefined') ? AppVariables.CPR.filter(item => item.name === shortname)[0].value : this.technology[shortname][index]['cprValue'];
+        this.technology[shortname][index]['mimoValue'] = (typeof this.technology[shortname][index].mimoValue == 'undefined') ? null : this.technology[shortname][index]['mimoValue'];
 
       } else {
 
@@ -216,7 +224,7 @@ export class DashboardPage {
         }).present();
 
       }
-      
+
 
     }
 
@@ -229,19 +237,17 @@ export class DashboardPage {
   getCbValue() {
 
     this.cb = 0;
-    for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
-      this.cb += (typeof this.baseline['ca_' + i] == 'undefined') ? 0 : this.baseline['ca_' + i]
-    }
+    this.baseline.forEach((item, index) => {
+      this.cb += (typeof item.ca == 'undefined') ? 0 : item.ca;
+    });
     this.techCb = 0;
-    this.selectedTechnologies.forEach((item, index) => {
-      //  this.formElements['ca_' + item.shortname] = 0;
-      let selectedCarrier = item.carrier;
-      this.technology['ca_' + item.shortname] = 0;
-      for (var c = 1; c < (selectedCarrier + 1); c++) {
-        this.technology['ca_' + item.shortname] += (typeof this.technology['ca_' + c + "_" + item.shortname] == 'undefined') ? 0 : Number(this.technology['ca_' + c + "_" + item.shortname]);
+    this.selectedTechnologies.forEach((tech, t) => {
+      this.technology[tech.shortname]['ca'] = 0;
+      this.technology[tech.shortname].forEach((item, index) => {
+        this.technology[tech.shortname]['ca'] += (typeof item.ca == 'undefined') ? 0 : Number(item.ca);
+        this.techCb += (typeof item.ca == 'undefined') ? 0 : item.ca;
+      })
 
-        this.techCb += (typeof this.technology['ca_' + c + "_" + item.shortname] == 'undefined') ? 0 : this.technology['ca_' + c + "_" + item.shortname];
-      }
     });
     this.TTPeakValue = Math.round(this.cb + this.techCb);
 
@@ -253,26 +259,30 @@ export class DashboardPage {
    */
   onBaselineChange(selectedValue: any, field: any, item: any, value?: any) {
 
-    if (field == "name_") {
-      this.baseline[field + item] = value;
+    if (field == "name") {
+      this.baseline[item].name = value;
     }
     else {
-      this.baseline[field + item] = selectedValue;
+      if (typeof this.baseline[item] != 'undefined')
+        this.baseline[item][field] = selectedValue;
     }
-    let nCells = this.baseline['nCells_' + item];
-    let chCapacity = this.baseline['chCapacity_' + item];
-    let qam = this.baseline['qam_' + item];
 
-    if (field == 'mimo_') {
-      this.baseline['mimoValue_' + item] = this.baseline['mimo_' + item];
+    let baseline = this.baseline[item];
+    let nCells = baseline.nCells;
+    let chCapacity = baseline.chCapacity
+    let qam = baseline.qam;
+
+    if (field == 'mimo') {
+
+      this.baseline[item].mimoValue = baseline.mimo;
     }
-    let mimo = (this.baseline['mimoValue_' + item] != null) ? this.baseline['mimoValue_' + item] : this.baseline['mimo_' + item];
-    let tn = this.baseline['thresholdValue_' + item];
-    let cpr = this.baseline['cprValue_' + item];
+    let mimo = (baseline.mimo != null) ? baseline.mimoValue : baseline.mimo;
+    let tn = baseline.thresholdValue;
+    let cpr = baseline.cprValue;
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
-      this.baseline['ca_' + item] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, 'carrier', tn, cpr);
+      this.baseline[item]['ca'] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, 'carrier', tn, cpr);
     }
-    
+
     this.getCbValue();
 
   }
@@ -280,24 +290,28 @@ export class DashboardPage {
 
     if (data.checked == true) {
       this.selectedTechnologies.push(data);
-      this.technology['ca_' + data.shortname] = ((typeof this.technology['ca_' + data.shortname] == 'undefined') ? 0 : this.technology['ca_' + data.shortname]);
+
+      if (typeof this.technology[data.shortname] == 'undefined')
+        this.technology[data.shortname] = [];
+
+      this.technology[data.shortname]['ca'] = ((typeof this.technology[data.shortname]['ca'] == 'undefined') ? 0 : this.technology[data.shortname]['ca']);
     } else {
       let newArray = this.selectedTechnologies.filter(function (el) {
         return el.name !== data.name;
       });
       this.selectedTechnologies = newArray;
     }
-    
+    this.getCbValue();
   }
   hideShowTechnology(data: any) {
 
     if (data.icon == 'md-arrow-dropup') {
-      
+
       this.selectedTechnologies.filter(function (el) {
         return el.name == data.name;
       })[0].icon = 'md-arrow-dropdown';
     } else {
-      
+
       this.selectedTechnologies.filter(function (el) {
         return el.name == data.name;
       })[0].icon = 'md-arrow-dropup';
@@ -310,35 +324,38 @@ export class DashboardPage {
    */
   onEvoluationChange(selectedValue: any, field: any, carrier: any, technology: any, value?: any) {
 
-    if (field == "name_") {
-      this.technology[field + carrier + '_' + technology] = value || 1;
+    if (field == "name") {
+      this.technology[technology][carrier][field] = value || 1;
+
     }
     else {
-      this.technology[field + carrier + '_' + technology] = selectedValue;
-    }
-    this.technology[field + carrier + '_' + technology] = selectedValue;
-    let nCells = this.technology['nCells_' + carrier + '_' + technology];
-    let chCapacity = this.technology['chCapacity_' + carrier + '_' + technology];
-    let qam = this.technology['qam_' + carrier + '_' + technology];
+      this.technology[technology][carrier][field] = selectedValue;
 
-    if (field == 'mimo_') {
-      this.technology['mimoValue_' + carrier + '_' + technology] = this.technology['mimo_' + carrier + '_' + technology];
     }
-    let mimo = (this.technology['mimoValue_' + carrier + '_' + technology] != null) ? this.technology['mimoValue_' + carrier + '_' + technology] : this.technology['mimo_' + carrier + '_' + technology];
-    let tn = this.technology['thresholdValue_' + carrier + '_' + technology];
+
+    let nCells = this.technology[technology][carrier]['nCells'];
+    let chCapacity = this.technology[technology][carrier]['chCapacity'];
+    let qam = this.technology[technology][carrier]['qam'];
+
+    if (field == 'mimo') {
+      this.technology[technology][carrier]['mimoValue'] = this.technology[technology][carrier]['mimo'];
+
+    }
+    let mimo = (this.technology[technology][carrier]['mimoValue'] != null) ? this.technology[technology][carrier]['mimoValue'] : this.technology[technology][carrier]['mimo'];
+    let tn = this.technology[technology][carrier]['thresholdValue'];
 
     let cpr = AppVariables.CPR.filter(item => item.name === technology)[0].value;
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
-      this.technology['ca_' + carrier + '_' + technology] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn, cpr);
+      this.technology[technology][carrier]['ca'] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, technology, tn, cpr);
     }
-    
+
     this.getCbValue();
 
   }
   upload_file(event: any) {
-    
+
     let fileName = event.target.files[0].name.split('.');
-    
+
 
     if (fileName[1].toLowerCase() == 'csv') {
       Papa.parse(event.target.files[0], {
@@ -347,7 +364,7 @@ export class DashboardPage {
         complete: function (results) {
           this.inputData = results.data;
 
-          
+
           localStorage.setItem("Input_Data", JSON.stringify(this.inputData));
         }
       });
@@ -363,7 +380,7 @@ export class DashboardPage {
   download_file() {
     let objArray: any = [];
     let outputArray: any = [];
-    
+
 
     objArray = JSON.parse(localStorage.getItem("Input_Data"));
     if (objArray == null) {
@@ -374,8 +391,8 @@ export class DashboardPage {
       }).present();
       return;
     }
-    
-     objArray.map(obj => {
+
+    objArray.map(obj => {
       if (obj["S. No"] === null) {
         return;
       }
@@ -392,7 +409,7 @@ export class DashboardPage {
       obj["Utilization (%) based on theoritical peak"] = g + "%";
 
       let i: number = this.TTPeakValue;
-      let h =  i - f;
+      let h = i - f;
       obj["Evolution Theoritical Peak Througput (in Mbps)"] = h;
       obj["Total Theoritical Peak Throuput Required (Mbps)"] = this.TTPeakValue;
       let j = Math.round(i * utilization);
@@ -402,7 +419,7 @@ export class DashboardPage {
     });
 
     let output_csv = Papa.unparse(outputArray, { header: true });
-    
+
 
     let blob = new Blob([output_csv]);
     let a: any = window.document.createElement("a");
@@ -414,98 +431,37 @@ export class DashboardPage {
   }
 
 
-  presentPrompt(item: any, shortName: any = 'baseline') {
-    let tn, cpr, mimo;
-    if (shortName == 'baseline') {
-      tn = this.baseline['thresholdValue_' + item];
-      cpr = this.baseline['cprValue_' + item];
-      mimo = this.baseline['mimoValue_' + item];
-    } else {
 
-      tn = this.technology['thresholdValue_' + item + '_' + shortName];
-      cpr = this.technology['cprValue_' + item + '_' + shortName];
-      mimo = this.technology['mimoValue_' + item + '_' + shortName];
-
-    }
-
-    let alert = this.altCtrl.create({
-      title: 'Advance Edit',
-      inputs: [
-        {
-          label: 'Spectrum Efficiency',
-          name: 'spectrumEfficiency',
-          placeholder: 'Spectrum Efficiency',
-          value: mimo
-        },
-        {
-          label: 'TN Overhead',
-          name: 'tnOverhead',
-          placeholder: 'TN Overhead',
-          value: tn
-        },
-        {
-          label: 'Cell Peak Rate',
-          name: 'cellPeakRate',
-          placeholder: 'Cell Peak Rate',
-          type: 'text',
-          value: cpr
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: data => {
-            
-          }
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            if (shortName == 'baseline') {
-              this.baseline['thresholdValue_' + item] = data.tnOverhead;
-              this.baseline['cprValue_' + item] = data.cellPeakRate;
-              this.baseline['mimoValue_' + item] = data.spectrumEfficiency;
-              this.onBaselineChange(this.baseline['mimo_' + item], 'mimo_', item);
-            } else {
-              this.technology['thresholdValue_' + item + '_' + shortName] = data.tnOverhead;
-              this.technology['cprValue_' + item + '_' + shortName] = data.cellPeakRate;
-              this.technology['mimoValue_' + item + '_' + shortName] = data.spectrumEfficiency;
-              this.onEvoluationChange(this.technology['mimo_' + item + '_' + shortName], 'mimo_', item, shortName);
-            }
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
   advanceEdit(item: any, shortName: any = 'baseline') {
     let tn, cpr, mimo;
     if (shortName == 'baseline') {
-      tn = this.baseline['thresholdValue_' + item];
-      cpr = this.baseline['cprValue_' + item];
-      mimo = this.baseline['mimoValue_' + item];
+
+      tn = this.baseline[item].thresholdValue;
+      cpr = this.baseline[item].cprValue;
+      mimo = this.baseline[item].mimoValue;
+
     } else {
 
-      tn = this.technology['thresholdValue_' + item + '_' + shortName];
-      cpr = this.technology['cprValue_' + item + '_' + shortName];
-      mimo = this.technology['mimoValue_' + item + '_' + shortName];
+      tn = this.technology[shortName][item]['thresholdValue'];
+      cpr = this.technology[shortName][item]['cprValue'];
+      mimo = this.technology[shortName][item]['mimoValue'];
 
     }
     let myModal = this.modalCtrl.create(AdvanceEditPage, { 'data': { tn: tn, cpr: cpr, mimo: mimo, shortName: shortName, item: item } });
     myModal.onDidDismiss(data => {
-      
+
       if (data) {
         if (data.shortName == 'baseline') {
-          this.baseline['thresholdValue_' + item] = data.tn;
-          this.baseline['cprValue_' + item] = data.cpr;
-          this.baseline['mimoValue_' + item] = data.mimo;
-          this.onBaselineChange(this.baseline['mimo_' + item], 'mimo_', item);
+
+          this.baseline[item]['thresholdValue'] = data.tn;
+          this.baseline[item]['cprValue'] = data.cpr;
+          this.baseline[item]['mimoValue'] = data.mimo;
+          this.onBaselineChange(this.baseline[item]['nCells'], 'nCells', item);
         } else {
-          this.technology['thresholdValue_' + item + '_' + shortName] = data.tn;
-          this.technology['cprValue_' + item + '_' + shortName] = data.cpr;
-          this.technology['mimoValue_' + item + '_' + shortName] = data.mimo;
-          this.onEvoluationChange(this.technology['mimo_' + item + '_' + shortName], 'mimo_', item, shortName);
+          this.technology[shortName][item]['thresholdValue'] = data.tn;
+          this.technology[shortName][item]['cprValue'] = data.cpr;
+          this.technology[shortName][item]['mimoValue'] = data.mimo;
+          this.onEvoluationChange(this.technology[shortName][item]['nCells'], 'nCells', item, shortName);
         }
       }
     });
@@ -526,42 +482,43 @@ export class DashboardPage {
     this.formData = [];
     let data = [];
 
-    for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
 
-      let chCapacity = this.baseline["chCapacity_" + i];
-      let qam = this.baseline["qam_" + i];
-      let nCell = this.baseline["nCells_" + i];
-      let mimoValue = this.baseline["mimo_" + i];
-      let carrier = this.baseline['name_' + i];
-      let ca = this.baseline["ca_" + i];
+    this.baseline.forEach((item, index) => {
+
+      let chCapacity = item.chCapacity;
+      let qam = item.qam;
+      let nCell = item.nCells;
+      let mimoValue = item.mimo;
+      let carrier = item.name;
+      let ca = item.ca;
       let mimoName = AppVariables.MIMO.filter(item => item.value === mimoValue);
       let mimo = (mimoName.length > 0) ? AppVariables.MIMO.filter(item => item.value === mimoValue)[0].name : null;
-      data.push({ name: carrier, sectors: nCell, channelBw: chCapacity, mimo: mimo, qam: qam, ca: ca, class: ('c-' + i) });
+      data.push({ name: carrier, sectors: nCell, channelBw: chCapacity, mimo: mimo, qam: qam, ca: ca, class: ('c-' + (index + 1)) });
       if (data.length == 4) {
         this.formData.push(data);
         data = [];
       }
-    }
+    });
 
 
     this.selectedTechnologies.forEach((item, index) => {
 
-      let techShortName = item.shortname;      
-      let selectedCarrier = item.carrier;
+      let techShortName = item.shortname;
+
+
+      this.technology[techShortName].forEach((item, index) => {
 
 
 
-      for (let t = 1; t <= selectedCarrier; t++) {
+        let chCapacity = item.chCapacity;
+        let qam = item.qam;
+        let nCell = item.nCells;
+        let mimoValue = item.mimo;
+        let carrier = item.name;
+        let ca = item.ca;
 
-        let chCapacity = this.technology["chCapacity_" + t + "_" + techShortName];
-        let qam = this.technology["qam_" + t + "_" + techShortName];
-        let nCell = this.technology["nCells_" + t + "_" + techShortName];
-        let mimoValue = this.technology["mimo_" + t + "_" + techShortName];
-        let carrier = this.technology['name_' + t + '_' + techShortName];
-        let ca = this.technology["ca_" + t + "_" + techShortName];
-       
         let mimoName = AppVariables.MIMO.filter(item => item.value === parseFloat(mimoValue));
-        
+
         let mimo = (mimoName.length == 0) ? null : mimoName[0].name;
         if (ca > 0)
           data.push({ name: carrier, sectors: nCell, channelBw: chCapacity, mimo: mimo, qam: qam, ca: ca, class: ('c-' + techShortName) });
@@ -570,7 +527,7 @@ export class DashboardPage {
           data = [];
         }
 
-      }
+      });
     });
 
     if (data.length > 0)
@@ -583,18 +540,22 @@ export class DashboardPage {
 
     this.report = [];
 
-    for (var i = 1; i < (this.selectedCarrierList.length + 1); i++) {
 
-      let value = ((typeof this.baseline['ca_' + i] == 'undefined') ? 0 : this.baseline['ca_' + i]) + '';
-      let technology = (typeof this.baseline['name_' + i] == 'undefined') ? 'Carrier ' + i : this.baseline['name_' + i];
-      this.report.push({ technology: technology, value: value, index: i });
-    }
+    this.baseline.forEach((item, index) => {
+
+      let value = (typeof item.ca == 'undefined') ? 0 : item.ca;
+      if (value > 0) {
+        let technology = (typeof item.name == 'undefined') ? 'Carrier ' + (index + 1) : item.name;
+        this.report.push({ technology: technology, value: value, index: (index + 1) });
+      }
+    });
 
     this.selectedTechnologies.forEach((item, index) => {
 
-      let value = (typeof this.technology['ca_' + item.shortname] == 'undefined') ? 0 : this.technology['ca_' + item.shortname];
+
+      let value = (typeof this.technology[item.shortname]['ca'] == 'undefined') ? 0 : this.technology[item.shortname]['ca'];
       let technology = item.name;
-      //let technology = (typeof this.technology['name_' + index + "_" + item.shortname] == 'undefined') ? item.shortname + index : this.technology['name_' + index + "_" + item.shortname];
+
       if (value > 0)
         this.report.push({ technology: technology, value: value });
     });
@@ -658,7 +619,7 @@ export class DashboardPage {
         data: {
           labels: this.chartLabels,
           datasets: [{
-            label: 'Daily Technology usage',
+            label: 'CSR Capacity',
             data: this.chartValues,
             duration: 2000,
             easing: 'easeInQuart',
@@ -805,9 +766,9 @@ export class DashboardPage {
         let squareChartOptions = { background: "white", height: exportSquareChart.clientHeight, width: (exportSquareChart.clientWidth - 10) };
 
         return html2canvas(exportSquareChart, squareChartOptions);
-      }).then(function (canvas) {
-
-        charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 20, 5, 5], style: 'squareImage' });
+      }).then(function (canvas) {      
+        
+        charts.push({ image: canvas.toDataURL(),height:canvas.height,width: canvas.width,alignment: 'center', margin: [5, 20, 5, 10], style: 'squareImage' });
         obj._epdf.generatePDF(charts);
         obj.isPdf = false;
         obj.pdfCss = '';
@@ -886,8 +847,6 @@ export class DashboardPage {
 
     }
 
-
-
   }
 
   checkPdfPagination(i: any, type: any) {
@@ -898,6 +857,57 @@ export class DashboardPage {
     } else {
       return false;
     }
+  }
+
+  removeRow(item: any, technology: any) {
+
+    let alert = this.altCtrl.create({
+      title: 'Confirmation!',
+       subTitle: 'Are you sure you want to delete this item?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+
+          }
+        },
+        {
+          text: 'Delete',
+          handler: data => {
+
+            if (technology == 'baseline') {
+              this.baseline.splice(item, 1);
+              this.carrier = +this.carrier - 1;
+              this.selectedCarrierList = this.carrierlist.slice(0, this.carrier);
+            } else {
+              let tech = this.selectedTechnologies.filter(function (el) {
+                return el.shortname == technology;
+              });
+
+              let carrier = tech[0].carrier - 1;
+
+              this.technology[technology].splice(item, 1);
+              this.selectedTechnologies.filter(function (el) {
+                return el.shortname == technology;
+              })[0].carrier = carrier;
+
+              this.selectedTechnologies.filter(function (el) {
+                return el.shortname == technology;
+              })[0].carrierList = this.carrierlist.slice(0, carrier);
+
+            }
+
+            this.getCbValue();
+
+          }
+        }
+      ]
+    });
+    alert.present();
+
+
+
   }
 
 
