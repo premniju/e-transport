@@ -102,7 +102,7 @@ export const AppVariables = {
         mimo: 3.15
       }
   ],
-    EXECUTIVE_EMAIL: "nijanthan.p@lnttechservices.com",
+    EXECUTIVE_EMAIL: "tejkiran.Pakyala@ericsson.com",
     EMAIL_SUBJECT: "Transport Capacity Dimensioning - Report",
 }
 
