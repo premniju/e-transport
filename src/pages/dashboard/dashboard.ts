@@ -761,7 +761,7 @@ export class DashboardPage {
       let options = { background: "white", height: exportStackedChart.clientHeight, width: exportStackedChart.clientWidth };
       html2canvas(exportStackedChart, options).then((canvas) => {
 
-        charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 5, 5, 5] });
+        charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 5, 5, 5],width:500 });
         let exportSquareChart = document.getElementById("exportSquareChart");
         let squareChartOptions = { background: "white", height: exportSquareChart.clientHeight, width: (exportSquareChart.clientWidth - 10) };
 
@@ -783,7 +783,7 @@ export class DashboardPage {
       let options = { background: "white", height: exportStackedChart.clientHeight, width: exportStackedChart.clientWidth };
       html2canvas(exportStackedChart, options).then((canvas) => {
 
-        charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 5, 5, 5] });
+        charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 5, 5, 5],width:500 });
         let exportSquareChart = document.getElementById("exportSquareChart");
         let squareChartOptions = { background: "white", height: exportSquareChart.clientHeight, width: (exportSquareChart.clientWidth - 10) };
 
@@ -813,14 +813,14 @@ export class DashboardPage {
       let options = { background: "white", height: exportStackedChart.clientHeight, width: exportStackedChart.clientWidth };
       html2canvas(exportStackedChart, options).then((canvas) => {
 
-        charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 5, 5, 5] });
+        charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 5, 5, 5],width:500 });
         let exportSquareChart = document.getElementById("exportSquareChart");
         let squareChartOptions = { background: "white", height: exportSquareChart.clientHeight, width: (exportSquareChart.clientWidth - 10) };
 
         return html2canvas(exportSquareChart, squareChartOptions);
       }).then(function (canvas) {
 
-        charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 20, 5, 5], style: 'squareImage', pageBreak: 'after' });
+        charts.push({ image: canvas.toDataURL(), alignment: 'center', margin: [5, 10, 5, 5], style: 'squareImage', pageBreak: 'after' });
 
         let exportSquareChart2 = document.getElementById("exportSquareChart2");
         let squareChartOptions2 = { background: "white", height: exportSquareChart2.clientHeight, width: (exportSquareChart2.clientWidth - 10) };
