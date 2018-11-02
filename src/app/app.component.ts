@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { App, Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
+import {HomePage} from '../pages/home/home';
+import {DashboardPage} from '../pages/dashboard/dashboard';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = 'login';
+  rootPage:any;
 
   constructor(public platform: Platform,
     public statusBar: StatusBar,
@@ -21,6 +22,11 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+      if(this.platform.is('core')){
+        this.rootPage = 'my-dashboard';        
+    }else{
+      this.rootPage = HomePage;       
+    }
 
       platform.registerBackButtonAction(() => {
  

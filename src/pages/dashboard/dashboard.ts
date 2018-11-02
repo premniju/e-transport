@@ -101,7 +101,7 @@ export class DashboardPage {
     let userInfo = JSON.parse(localStorage.getItem("userData"));
 
     if (userInfo == null) {
-      this.logout();
+     // this.logout();
     }
 
 
