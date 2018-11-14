@@ -259,7 +259,7 @@ export class HomePage {
     let tn = this.formElements['thresholdValue_' + item];
     let cpr = this.formElements['cprValue_' + item];
     if (nCells != null && chCapacity != null && qam != null && mimo != null) {
-      this.formElements['ca_' + item] = this._eDim.generateCa(chCapacity, qam, mimo, nCells, tn, cpr);
+      this.formElements['ca_' + item] = this._eDim.generateCa(chCapacity, qam, mimo, nCells,null, tn, cpr);
     }
     this.getCbValue();
 
