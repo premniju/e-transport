@@ -146,10 +146,11 @@ export class ChartPage {
         },
         options: {
           maintainAspectRatio: false,
+          responsive: true,
           layout: {
             padding: {
-              left: 50,
-              right: 0,
+              left: 30,
+              right: 30,
               top: 0,
               bottom: 0
             }
@@ -188,7 +189,7 @@ export class ChartPage {
                         var fill = custom.backgroundColor ? custom.backgroundColor : getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
                         var stroke = custom.borderColor ? custom.borderColor : getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
                         var bw = custom.borderWidth ? custom.borderWidth : getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
-                        console.log(label)
+                        
                         return {
                           text: label,
                           fillStyle: fill,
