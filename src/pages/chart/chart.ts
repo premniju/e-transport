@@ -66,7 +66,7 @@ export class ChartPage {
       let carrier = "Carrier " + i;
       let ca = this.navParams.data.formdata["ca_" + i];
 
-      let mimo = AppVariables.MIMO.filter(item => item.value === mimoValue)[0].name;
+      let mimo = AppVariables.MIMO.filter(item => item.value === parseFloat(mimoValue))[0].name;
       data.push({ name: carrier, sectors: nCell, channelBw: chCapacity, mimo: mimo, qam: qam, ca: ca, class: ('c-' + i) });
       if (data.length == 2) {
         this.formData.push(data);
